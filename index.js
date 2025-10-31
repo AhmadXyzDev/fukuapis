@@ -20,11 +20,22 @@ try {
 // API endpoint for tobase64 (GET method)
 app.get('/api/tobase64', (req, res) => {
   const text = req.query.text;
+
   if (!text) {
-    return res.status(400).json({ error: 'Missing "text" query parameter' });
+    return res.status(400).json({
+      status: false,
+      message: 'Missing "text" query parameter'
+    });
   }
-  const base64 = Buffer.from(text).toString('base64');
-  res.json({ original: text, base64 });
+
+  const base64 = Buffer.from(text, 'utf-8').toString('base64');
+
+  res.json({
+    status: true,
+    madeBy: "AhmadXyz-Fukushima",
+    aselinya: text,
+    base64
+  });
 });
 
 // For future endpoints from config.json, you can add logic here to dynamically load them

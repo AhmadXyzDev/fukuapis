@@ -30,10 +30,10 @@ module.exports = async (req, res) => {
     res.json({
       status: true,
       status_code: 200,
-      creator: "AhmadXyz-Fukushima",
+      metode: "GET",
       result: {
         status: true,
-        methode: "GET",
+        MadeBy: "AhmadXyz",
         metadata: {
           type: "video",
           videoId: result.metadata.videoId,

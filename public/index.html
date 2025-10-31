@@ -505,6 +505,7 @@
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
+      z-index: 1;
     }
 
     .endpoint::after {
@@ -517,6 +518,7 @@
       background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
       opacity: 0;
       transition: opacity 0.4s;
+      z-index: 0;
     }
 
     .endpoint:hover::after {
@@ -600,6 +602,7 @@
     .input-wrapper {
       position: relative;
     }
+    
 
     .try-form input {
       width: 100%;
@@ -611,6 +614,7 @@
       font-size: 1rem;
       font-family: inherit;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index
     }
 
     .try-form input:focus {
@@ -799,6 +803,12 @@
     ::-webkit-scrollbar-thumb:hover {
       background: linear-gradient(135deg, #764ba2, #f43f5e);
     }
+    
+    .logo-icon img {
+  width: 40px;   
+  height: 40px;
+  object-fit: contain; 
+}
   </style>
 </head>
 <body>
@@ -810,7 +820,9 @@
   
   <header class="header">
     <div class="logo-container">
-      <div class="logo-icon">🚀</div>
+      <div class="logo-icon">
+  <img src="https://files.catbox.moe/vwfibg.jpg" alt="Logo" />
+</div>
       <div class="logo">FukuAPI</div>
     </div>
     <nav class="nav">
@@ -823,11 +835,11 @@
     <div class="status-bar">
       <div class="status-item">
         <div class="status-dot"></div>
-        <span id="uptime">Uptime: 99.9%</span>
+        <span id="uptime">Work 98%</span>
       </div>
       <div class="status-item">
-        <span id="current-time">--:--:-- WIB</span>
-      </div>
+  <span id="current-time">--:--:-- WIB</span>
+</div>
     </div>
   </header>
   
@@ -835,13 +847,13 @@
     <section id="home" class="hero">
       <div class="hero-badge">
         <div class="badge-dot"></div>
-        <span>API v2.0 Now Live</span>
+        <span>API v0.1 By</span>
       </div>
-      <h1 class="hero-title">The Future of REST APIs</h1>
-      <p class="hero-subtitle">Lightning-fast, ultra-secure, and infinitely scalable API infrastructure built for tomorrow's developers. Experience the next generation of web services.</p>
+      <h1 class="hero-title">Selamat datang di FUKU API.</h1>
+      <p class="hero-subtitle">Dapatkan fitur menarik dan lengkap secara gratis tanpa apikey.</p>
       <div class="hero-buttons">
-        <button id="try-button" class="button button-primary">Get Started Free</button>
-        <button class="button button-secondary">View Documentation</button>
+        <button id="try-button" class="button button-primary">Start free</button>
+        <button class="button button-secondary">Dokumentasi</button>
       </div>
     </section>
 
@@ -849,65 +861,70 @@
       <div class="stat-card">
         <div class="stat-icon">⚡</div>
         <div class="stat-value" id="response-time">< 50ms</div>
-        <div class="stat-label">Response Time</div>
+        <div class="stat-label">Kecepatan respon</div>
       </div>
       <div class="stat-card">
         <div class="stat-icon">🌍</div>
         <div class="stat-value" id="requests">10M+</div>
-        <div class="stat-label">Daily Requests</div>
+        <div class="stat-label">Request</div>
       </div>
       <div class="stat-card">
         <div class="stat-icon">🔒</div>
         <div class="stat-value">100%</div>
-        <div class="stat-label">Secure</div>
+        <div class="stat-label">Keamanan Pengguna</div>
       </div>
       <div class="stat-card">
         <div class="stat-icon">🚀</div>
-        <div class="stat-value" id="uptime-stat">99.99%</div>
+        <div class="stat-value" id="uptime-stat">96%</div>
         <div class="stat-label">Uptime</div>
       </div>
     </div>
     
     <section id="docs" class="docs">
       <div class="section-header">
-        <div class="section-badge">DOCUMENTATION</div>
+        <div class="section-badge">DOKUMENTASI</div>
         <h2 class="section-title">API Endpoints</h2>
-        <p class="section-subtitle">Simple, powerful, and ready to use. Get started in minutes with our intuitive API.</p>
+        <p class="section-subtitle">Jelajahi sekarang yuk...</p>
       </div>
 
-      <div class="endpoint">
-        <div class="endpoint-header">
-          <div class="endpoint-method">GET</div>
-          <h3>/api/tobase64</h3>
-        </div>
-        <p>Transform any text into Base64 encoding with lightning speed. Perfect for data encoding, API authentication, and secure data transmission.</p>
-        <pre class="code-block">GET https://fukuapis.vercel.app/api/tobase64?text=your_text_here</pre>
-        <div class="try-form">
-          <div class="input-wrapper">
-            <input type="text" id="input-text" placeholder="Enter your text (e.g., Hello World!)">
-          </div>
-          <button id="convert-button" class="button button-primary">🚀 Convert to Base64</button>
-          <div id="result" class="result"></div>
-        </div>
-      </div>
+  <div class="sparkle-box">
+  <div class="endpoint-header">
+    <div class="endpoint-method">GET</div>
+    <h3>/api/ytmp3</h3>
+  </div>
+  <p>Downloader YouTube Audio</p>
+  <pre class="code-block">GET https://fukuapis.vercel.app/api/ytmp3?url=https://example.com&quality=120</pre>
+  <div class="try-form">
+    <div class="input-wrapper">
+      <input type="text" id="urlnya" placeholder="Masukkan text...">
+    </div>
+    <button id="convert-beton" class="button button-primary">Get</button>
+    <div id="goto" class="result"></div>
+  </div>
+</div>
 
-      <div class="endpoint">
-        <div class="endpoint-header">
-          <div class="endpoint-method" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">POST</div>
-          <h3>/api/decode</h3>
-        </div>
-        <p>Decode Base64 strings back to readable text. Fast, reliable, and secure decoding for all your needs.</p>
-        <pre class="code-block">POST https://fukuapis.vercel.app/api/decode
-Content-Type: application/json
-{ "data": "base64_string" }</pre>
-      </div>
+  <div class="sparkle-box">
+  <div class="endpoint-header">
+    <div class="endpoint-method">GET</div>
+    <h3>/api/tobase64</h3>
+  </div>
+  <p>Tools Convert text tobase64.</p>
+  <pre class="code-block">GET https://fukuapis.vercel.app/api/tobase64?text=your_text_here</pre>
+  <div class="try-form">
+    <div class="input-wrapper">
+      <input type="text" id="input-text" placeholder="Masukkan text...">
+    </div>
+    <button id="convert-button" class="button button-primary">🚀 Convert to Base64</button>
+    <div id="result" class="result"></div>
+  </div>
+</div>
 
       <div class="endpoint">
         <div class="endpoint-header">
           <div class="endpoint-method" style="background: linear-gradient(135deg, #f59e0b, #d97706);">GET</div>
           <h3>/api/status</h3>
         </div>
-        <p>Check API health, uptime statistics, and real-time performance metrics. Monitor your service reliability.</p>
+        <p>Cek status FUKU API mulai dari waktu uptime, tanggal dll.</p>
         <pre class="code-block">GET https://fukuapis.vercel.app/api/status</pre>
       </div>
     </section>
@@ -916,12 +933,12 @@ Content-Type: application/json
       <div class="section-header">
         <div class="section-badge">GET IN TOUCH</div>
         <h2 class="section-title">Contact Us</h2>
-        <p class="section-subtitle">Need custom integrations, enterprise support, or have questions? We're here to help you succeed.</p>
+        <p class="section-subtitle">Ingin membantu menambahkan fitur? silahkan hub kami.</p>
       </div>
       <form id="contact-form">
         <input type="email" placeholder="Your email address" required>
         <textarea placeholder="Tell us about your project or question..." required></textarea>
-        <button type="submit" class="button button-primary">Send Message 📬</button>
+        <button type="submit" class="button button-primary">Kirim pesan</button>
       </form>
     </section>
   </main>
@@ -929,254 +946,199 @@ Content-Type: application/json
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-logo">🚀 FukuAPI</div>
-      <p class="footer-text">&copy; 2025 FukuAPI. Powering the next generation of web services.</p>
-      <p class="footer-text" style="margin-top: 0.5rem; font-size: 0.8rem;">Built with ❤️ for developers worldwide</p>
+      <p class="footer-text">&copy; 2025 FukuAPI.</p>
+      <p class="footer-text" style="margin-top: 0.5rem; font-size: 0.8rem;">Made By AhmadXyz</p>
     </div>
   </footer>
   
   <script>
-    // Create advanced particles
-    function createParticles() {
-      const particleCount = 80;
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 6 + 's';
-        particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
-        
-        const size = Math.random() * 3 + 1;
-        particle.style.width = size + 'px';
-        particle.style.height = size + 'px';
-        
-        const colors = ['#667eea', '#764ba2', '#f43f5e', '#4ade80', '#3b82f6'];
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        particle.style.background = color;
-        particle.style.boxShadow = `0 0 10px ${color}`;
-        
-        particle.style.animation = `float ${Math.random() * 8 + 6}s infinite ease-in-out`;
-        
-        document.body.appendChild(particle);
-      }
+function createParticles() {
+  const particleCount = 80;
+  for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.top = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 6 + 's';
+    particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+    const size = Math.random() * 3 + 1;
+    particle.style.width = size + 'px';
+    particle.style.height = size + 'px';
+    const colors = ['#667eea', '#764ba2', '#f43f5e', '#4ade80', '#3b82f6'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    particle.style.background = color;
+    particle.style.boxShadow = `0 0 10px ${color}`;
+    particle.style.animation = `float ${Math.random() * 8 + 6}s infinite ease-in-out`;
+    document.body.appendChild(particle);
+  }
+}
+createParticles();
+
+function updateTime() {
+  const now = new Date();
+  const options = { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+  const timeString = now.toLocaleTimeString('id-ID', options);
+  const dayOptions = { timeZone: 'Asia/Jakarta', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const dayString = now.toLocaleDateString('id-ID', dayOptions);
+  document.getElementById('current-time').textContent = `${timeString} WIB | ${dayString}`;
+}
+updateTime();
+setInterval(updateTime, 1000);
+
+const startTime = new Date();
+function updateUptime() {
+  const now = new Date();
+  const diffMs = now - startTime;
+  const diffHrs = Math.floor(diffMs / 3600000);
+  const diffMins = Math.floor((diffMs % 3600000) / 60000);
+  const diffSecs = Math.floor((diffMs % 60000) / 1000);
+  document.getElementById('uptime').textContent = `Uptime: ${diffHrs}h ${diffMins}m ${diffSecs}s`;
+}
+setInterval(updateUptime, 1000);
+
+function animateCounter(element, target, suffix = '') {
+  let current = 0;
+  const increment = target / 100;
+  const timer = setInterval(() => {
+    current += increment;
+    if (current >= target) {
+      element.textContent = target + suffix;
+      clearInterval(timer);
+    } else {
+      element.textContent = Math.floor(current) + suffix;
     }
-    createParticles();
+  }, 20);
+}
 
-    // Real-time Clock (WIB - GMT+7)
-    function updateTime() {
-      const now = new Date();
-      const options = { 
-        timeZone: 'Asia/Jakarta',
-        hour: '2-digit', 
-        minute: '2-digit', 
-        second: '2-digit',
-        hour12: false 
-      };
-      const timeString = now.toLocaleTimeString('id-ID', options);
-      
-      const dayOptions = { 
-        timeZone: 'Asia/Jakarta',
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      };
-      const dayString = now.toLocaleDateString('id-ID', dayOptions);
-      
-      document.getElementById('current-time').textContent = `${timeString} WIB | ${dayString}`;
-    }
-    
-    updateTime();
-    setInterval(updateTime, 1000);
-
-    // Uptime Calculator
-    const startTime = new Date();
-    function updateUptime() {
-      const now = new Date();
-      const diffMs = now - startTime;
-      const diffHrs = Math.floor(diffMs / 3600000);
-      const diffMins = Math.floor((diffMs % 3600000) / 60000);
-      const diffSecs = Math.floor((diffMs % 60000) / 1000);
-      
-      document.getElementById('uptime').textContent = 
-        `Uptime: ${diffHrs}h ${diffMins}m ${diffSecs}s`;
-    }
-    
-    setInterval(updateUptime, 1000);
-
-    // Animated counters
-    function animateCounter(element, target, suffix = '') {
-      let current = 0;
-      const increment = target / 100;
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          element.textContent = target + suffix;
-          clearInterval(timer);
-        } else {
-          element.textContent = Math.floor(current) + suffix;
-        }
-      }, 20);
-    }
-
-    // Intersection Observer for animations
-    const observerOptions = {
-      threshold: 0.2,
-      rootMargin: '0px 0px -100px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-          
-          // Animate stat cards
-          if (entry.target.classList.contains('stat-card')) {
-            const valueEl = entry.target.querySelector('.stat-value');
-            const text = valueEl.textContent;
-            if (text.includes('ms')) {
-              animateCounter(valueEl, 50, 'ms');
-            } else if (text.includes('M+')) {
-              animateCounter(valueEl, 10, 'M+');
-            } else if (text.includes('%')) {
-              const value = parseFloat(text);
-              let current = 0;
-              const timer = setInterval(() => {
-                current += 0.5;
-                if (current >= value) {
-                  valueEl.textContent = value + '%';
-                  clearInterval(timer);
-                } else {
-                  valueEl.textContent = current.toFixed(2) + '%';
-                }
-              }, 20);
+const observerOptions = { threshold: 0.2, rootMargin: '0px 0px -100px 0px' };
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+      if (entry.target.classList.contains('stat-card')) {
+        const valueEl = entry.target.querySelector('.stat-value');
+        const text = valueEl.textContent;
+        if (text.includes('ms')) animateCounter(valueEl, 50, 'ms');
+        else if (text.includes('M+')) animateCounter(valueEl, 10, 'M+');
+        else if (text.includes('%')) {
+          const value = parseFloat(text);
+          let current = 0;
+          const timer = setInterval(() => {
+            current += 0.5;
+            if (current >= value) {
+              valueEl.textContent = value + '%';
+              clearInterval(timer);
+            } else {
+              valueEl.textContent = current.toFixed(2) + '%';
             }
-          }
+          }, 20);
         }
-      });
-    }, observerOptions);
-
-    document.querySelectorAll('.endpoint, .contact, .stat-card').forEach(el => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(50px)';
-      el.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
-      observer.observe(el);
-    });
-
-    // Smooth scroll for "Try It Now" button
-    document.getElementById('try-button').addEventListener('click', () => {
-      document.getElementById('docs').scrollIntoView({ behavior: 'smooth' });
-      setTimeout(() => {
-        document.getElementById('input-text').focus();
-      }, 800);
-    });
-
-    // Convert to Base64 - redirect to API URL
-    document.getElementById('convert-button').addEventListener('click', () => {
-      const inputText = document.getElementById('input-text').value.trim();
-      const resultDiv = document.getElementById('result');
-      
-      if (!inputText) {
-        resultDiv.innerHTML = '⚠️ <span style="color: #f59e0b;">Please enter some text first!</span>';
-        resultDiv.classList.add('show');
-        return;
       }
+    }
+  });
+}, observerOptions);
 
-      // Show redirecting message with animation
-      resultDiv.innerHTML = '<div class="loading"></div> <span style="color: #667eea;">Redirecting to API...</span>';
-      resultDiv.classList.add('show');
+document.querySelectorAll('.endpoint, .contact, .stat-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(50px)';
+  el.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+  observer.observe(el);
+});
 
-      // Redirect to the API URL
-      setTimeout(() => {
-        window.location.href = `https://fukuapis.vercel.app/api/tobase64?text=${encodeURIComponent(inputText)}`;
-      }, 800);
-    });
+document.getElementById('try-button').addEventListener('click', () => {
+  document.getElementById('docs').scrollIntoView({ behavior: 'smooth' });
+  setTimeout(() => { document.getElementById('input-text').focus(); }, 800);
+});
 
-    // Enter key to convert
-    document.getElementById('input-text').addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        document.getElementById('convert-button').click();
-      }
-    });
+document.getElementById('convert-beton').addEventListener('click', () => {
+  const urlyt = document.getElementById('urlnya').value.trim();
+  const re = document.getElementById('goto');
+  if (!urlyt) {
+    re.innerHTML = '⚠️ <span style="color: #f59e0b;">Masukkan input</span>';
+    re.classList.add('show');
+    return;
+  }
+  re.innerHTML = '<div class="loading"></div> <span style="color: #667eea;">Proses...</span>';
+  re.classList.add('show');
+  setTimeout(() => { window.location.href = `https://fukuapis.vercel.app/api/ytmp3?url=${encodeURIComponent(urlyt)}&quality=128`; }, 800);
+});
+document.getElementById('urlnya').addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('convert-beton').click(); });
 
-    // Contact form submission with animation
-    document.getElementById('contact-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const button = e.target.querySelector('button');
-      const originalText = button.textContent;
-      
-      button.innerHTML = '<div class="loading"></div> Sending...';
-      button.disabled = true;
-      
-      setTimeout(() => {
-        button.textContent = '✓ Message Sent!';
-        button.style.background = 'linear-gradient(135deg, #4ade80, #22c55e)';
-        
-        setTimeout(() => {
-          button.textContent = originalText;
-          button.style.background = '';
-          button.disabled = false;
-          e.target.reset();
-        }, 2000);
-      }, 1500);
-    });
+document.getElementById('convert-button').addEventListener('click', () => {
+  const inputText = document.getElementById('input-text').value.trim();
+  const resultDiv = document.getElementById('result');
+  if (!inputText) {
+    resultDiv.innerHTML = '⚠️ <span style="color: #f59e0b;">Please enter some text first!</span>';
+    resultDiv.classList.add('show');
+    return;
+  }
+  resultDiv.innerHTML = '<div class="loading"></div> <span style="color: #667eea;">Redirecting to API...</span>';
+  resultDiv.classList.add('show');
+  setTimeout(() => { window.location.href = `https://fukuapis.vercel.app/api/tobase64?text=${encodeURIComponent(inputText)}`; }, 800);
+});
+document.getElementById('input-text').addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('convert-button').click(); });
 
-    // Parallax effect for orbs
-    document.addEventListener('mousemove', (e) => {
-      const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
-      const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
-      
-      document.querySelectorAll('.orb').forEach((orb, index) => {
-        const speed = (index + 1) * 0.5;
-        orb.style.transform = `translate(${moveX * speed}px, ${moveY * speed}px)`;
-      });
-    });
+document.getElementById('contact-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const button = e.target.querySelector('button');
+  const originalText = button.textContent;
+  button.innerHTML = '<div class="loading"></div> Sending...';
+  button.disabled = true;
+  setTimeout(() => {
+    button.textContent = '✓ Message Sent!';
+    button.style.background = 'linear-gradient(135deg, #4ade80, #22c55e)';
+    setTimeout(() => {
+      button.textContent = originalText;
+      button.style.background = '';
+      button.disabled = false;
+      e.target.reset();
+    }, 2000);
+  }, 1500);
+});
 
-    // Add active state to navigation
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav a');
+document.addEventListener('mousemove', (e) => {
+  const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+  const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+  document.querySelectorAll('.orb').forEach((orb, index) => {
+    const speed = (index + 1) * 0.5;
+    orb.style.transform = `translate(${moveX * speed}px, ${moveY * speed}px)`;
+  });
+});
 
-    window.addEventListener('scroll', () => {
-      let current = '';
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (scrollY >= (sectionTop - 200)) {
-          current = section.getAttribute('id');
-        }
-      });
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 100;
+    const sectionHeight = section.offsetHeight;
+    if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) current = section.getAttribute('id');
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    link.style.color = 'rgba(255, 255, 255, 0.8)';
+    if (link.getAttribute('href').slice(1) === current) link.style.color = '#667eea';
+  });
+});
 
-      navLinks.forEach(link => {
-        link.style.color = 'rgba(255, 255, 255, 0.8)';
-        if (link.getAttribute('href').slice(1) === current) {
-          link.style.color = '#667eea';
-        }
-      });
-    });
+setInterval(() => {
+  const responseTime = document.getElementById('response-time');
+  const randomMs = Math.floor(Math.random() * 20) + 40;
+  responseTime.textContent = `< ${randomMs}ms`;
+}, 5000);
 
-    // Random stat updates for realism
-    setInterval(() => {
-      const responseTime = document.getElementById('response-time');
-      const randomMs = Math.floor(Math.random() * 20) + 40;
-      responseTime.textContent = `< ${randomMs}ms`;
-    }, 5000);
+setInterval(() => {
+  const requests = document.getElementById('requests');
+  const currentVal = parseInt(requests.textContent);
+  requests.textContent = (currentVal + Math.floor(Math.random() * 100)) + 'M+';
+}, 10000);
 
-    setInterval(() => {
-      const requests = document.getElementById('requests');
-      const currentVal = parseInt(requests.textContent);
-      requests.textContent = (currentVal + Math.floor(Math.random() * 100)) + 'M+';
-    }, 10000);
-
-    // Add glow effect on code blocks
-    document.querySelectorAll('.code-block').forEach(block => {
-      block.addEventListener('mouseenter', () => {
-        block.style.boxShadow = '0 0 30px rgba(102, 126, 234, 0.4)';
-      });
-      block.addEventListener('mouseleave', () => {
-        block.style.boxShadow = '';
-      });
-    });
-  </script>
+document.querySelectorAll('.code-block').forEach(block => {
+  block.addEventListener('mouseenter', () => { block.style.boxShadow = '0 0 30px rgba(102, 126, 234, 0.4)'; });
+  block.addEventListener('mouseleave', () => { block.style.boxShadow = ''; });
+});
+</script>
 </body>
 </html>

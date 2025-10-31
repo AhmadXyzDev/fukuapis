@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FukuAPI - Premium REST API Service</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
-  <link rel="stylesheet" href="style.css">
   <style>
     * {
       margin: 0;
@@ -522,8 +521,8 @@
       }, 800);
     });
 
-    // Convert to Base64 with API call
-    document.getElementById('convert-button').addEventListener('click', async () => {
+    // Convert to Base64 - redirect to API URL
+    document.getElementById('convert-button').addEventListener('click', () => {
       const inputText = document.getElementById('input-text').value.trim();
       const resultDiv = document.getElementById('result');
       
@@ -533,33 +532,14 @@
         return;
       }
 
-      // Show loading
-      resultDiv.innerHTML = '<div class="loading"></div> Converting...';
+      // Show redirecting message
+      resultDiv.innerHTML = '<div class="loading"></div> Redirecting to API...';
       resultDiv.classList.add('show');
 
-      try {
-        // Call the actual API
-        const response = await fetch(`/api/tobase64?text=${encodeURIComponent(inputText)}`);
-        
-        if (!response.ok) {
-          throw new Error('API request failed');
-        }
-
-        const data = await response.json();
-        
-        // Display result
-        resultDiv.innerHTML = `
-          <strong>✓ Success!</strong><br>
-          Base64: <span style="color: #4ade80">${data.result || btoa(inputText)}</span>
-        `;
-      } catch (error) {
-        // Fallback to client-side encoding if API fails
-        const base64 = btoa(inputText);
-        resultDiv.innerHTML = `
-          <strong>✓ Converted (Client-side):</strong><br>
-          Base64: <span style="color: #4ade80">${base64}</span>
-        `;
-      }
+      // Redirect to the API URL
+      setTimeout(() => {
+        window.location.href = `https://fukuapis.vercel.app/api/tobase64?text=${encodeURIComponent(inputText)}`;
+      }, 500);
     });
 
     // Enter key to convert
@@ -598,7 +578,5 @@
       observer.observe(el);
     });
   </script>
-  
-  <script src="script.js"></script>
 </body>
 </html>

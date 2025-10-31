@@ -90,6 +90,24 @@ app.get('/api/ytmp3', async (req, res) => {
   }
 });
 
+app.get('/api/status', (req, res) => {
+  const now = new Date();
+
+  res.json({
+    status: true,
+    status_code: 200,
+    service: "Fukushima API",
+    status_message: "Active",
+    server_time: now.toISOString(), // waktu UTC
+    server_timestamp: now.getTime(), // timestamp ms
+    local_time: now.toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }),
+    info: {
+      message: "API berjalan normal",
+      uptime: process.uptime() // detik sejak server start
+    }
+  });
+});
+
 // For future endpoints from config.json, you can add logic here to dynamically load them
 // Example: config.endpoints.forEach(endpoint => app[endpoint.method]('/api/' + endpoint.name, require('./api/' + endpoint.name)));
 

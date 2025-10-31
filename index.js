@@ -38,6 +38,26 @@ app.get('/api/tobase64', (req, res) => {
   });
 });
 
+app.get('/api/ytmp3', async (req, res) => {
+  const url = req.query.url;
+  if (!url) return res.status(400).json({ status:false, error:'Missing "url" query parameter' });
+
+  try {
+    const apiUrl = `https://api.vreden.my.id/api/v1/download/youtube/audio?url=${encodeURIComponent(url)}&quality=128`;
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    res.json({
+      status: true,
+      status_code: 200,
+      metode: "GET",
+      result: data.result
+    });
+  } catch (err) {
+    res.status(500).json({ status:false, status_code:500, error: err.message });
+  }
+});
+
 // For future endpoints from config.json, you can add logic here to dynamically load them
 // Example: config.endpoints.forEach(endpoint => app[endpoint.method]('/api/' + endpoint.name, require('./api/' + endpoint.name)));
 

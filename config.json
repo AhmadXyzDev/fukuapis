@@ -4,6 +4,11 @@
       "name": "tobase64",
       "method": "get",
       "description": "Convert text to Base64"
+    },
+    {
+      "name": "ytmp3",
+      "method": "get",
+      "description": "Download YouTube audio as MP3"
     }
   ]
 }

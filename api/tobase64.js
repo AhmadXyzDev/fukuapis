@@ -3,8 +3,17 @@
 module.exports = (req, res) => {
   const text = req.query.text;
   if (!text) {
-    return res.status(400).json({ error: 'Missing "text" query parameter' });
+    return res.status(400).json({
+      status: false,
+      error: 'Missing "text" query parameter'
+    });
   }
+
   const base64 = Buffer.from(text).toString('base64');
-  res.json({ original: text, base64 });
+  res.json({
+    status: true,
+    "Made by": "AhmadXyz-Fukushima",
+    aselinya: text,
+    base64
+  });
 };

@@ -1,0 +1,67 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FukuAPI - Premium REST API Service</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+</head>
+<body>
+  <div class="background"></div>
+  <header class="header">
+    <div class="logo">FukuAPI</div>
+    <nav class="nav">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#docs">Docs</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <main class="main">
+    <section id="home" class="hero">
+      <h1 class="hero-title">Welcome to FukuAPI</h1>
+      <p class="hero-subtitle">The ultimate REST API for modern developers. Fast, secure, and infinitely scalable.</p>
+      <div class="cta">
+        <button id="try-button" class="button">Try It Now</button>
+      </div>
+    </section>
+    
+    <section id="docs" class="docs">
+      <h2>API Documentation</h2>
+      <div class="endpoint">
+        <h3>/api/tobase64</h3>
+        <p>Convert text to Base64 encoding.</p>
+        <pre class="code-block">
+GET /api/tobase64?text=your_text_here
+        </pre>
+        <div class="try-form">
+          <input type="text" id="input-text" placeholder="Enter text (e.g., halo)">
+          <button id="convert-button" class="button">Convert</button>
+          <div id="result" class="result"></div>
+        </div>
+      </div>
+      <!-- Add more endpoints here in the future -->
+    </section>
+    
+    <section id="contact" class="contact">
+      <h2>Contact Us</h2>
+      <p>Reach out for custom integrations or support.</p>
+      <form>
+        <input type="email" placeholder="Your email">
+        <textarea placeholder="Your message"></textarea>
+        <button type="submit" class="button">Send</button>
+      </form>
+    </section>
+  </main>
+  
+  <footer class="footer">
+    <p>&copy; 2025 FukuAPI. All rights reserved.</p>
+  </footer>
+  
+  <script src="script.js"></script>
+</body>
+</html>

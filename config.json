@@ -1,0 +1,9 @@
+{
+  "endpoints": [
+    {
+      "name": "tobase64",
+      "method": "get",
+      "description": "Convert text to Base64"
+    }
+  ]
+}

@@ -40,21 +40,53 @@ app.get('/api/tobase64', (req, res) => {
 
 app.get('/api/ytmp3', async (req, res) => {
   const url = req.query.url;
-  if (!url) return res.status(400).json({ status:false, error:'Missing "url" query parameter' });
+  if (!url) return res.status(400).json({ status: false, status_code: 400, error: 'Missing "url" query parameter' });
 
   try {
     const apiUrl = `https://api.vreden.my.id/api/v1/download/youtube/audio?url=${encodeURIComponent(url)}&quality=128`;
     const response = await fetch(apiUrl);
     const data = await response.json();
+    const result = data.result;
 
     res.json({
       status: true,
       status_code: 200,
-      metode: "",
-      result: data.result
+      metode: "GET",
+      result: {
+        status: true,
+        MadeBy: "AhmadXyz-Fukushima",
+        metadata: {
+          type: "video",
+          videoId: result.metadata.videoId,
+          url: result.metadata.url,
+          title: result.metadata.title,
+          description: result.metadata.description,
+          image: result.metadata.image,
+          thumbnail: result.metadata.thumbnail,
+          seconds: result.metadata.duration.seconds,
+          timestamp: result.metadata.duration.timestamp,
+          duration: {
+            seconds: result.metadata.duration.seconds,
+            timestamp: result.metadata.duration.timestamp
+          },
+          ago: result.metadata.ago,
+          views: result.metadata.views,
+          author: {
+            name: result.metadata.author.name,
+            url: result.metadata.author.url
+          }
+        },
+        download: {
+          status: true,
+          quality: result.download.quality,
+          availableQuality: result.download.availableQuality,
+          url: result.download.url,
+          filename: result.download.filename
+        }
+      }
     });
   } catch (err) {
-    res.status(500).json({ status:false, status_code:500, error: err.message });
+    res.status(500).json({ status: false, status_code: 500, error: err.message });
   }
 });
 

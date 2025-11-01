@@ -108,6 +108,36 @@ app.get('/api/status', (req, res) => {
   });
 });
 
+app.get("/api/imagen", async (req, res) => {
+  const { prompt, ratio } = req.query;
+
+  if (!prompt) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing "prompt" query parameter'
+    });
+  }
+
+  try {
+    const apiUrl = `https://api.nekolabs.web.id/ai/imagen/3?prompt=${encodeURIComponent(prompt)}&ratio=${encodeURIComponent(ratio || "1:1")}`;
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    res.json({
+      success: true,
+      madeBy: "AhmadXyz-Fukusima",
+      result: data.result,
+      ratio: ratio || "1:1",
+      time: data.responseTime || "unknown"
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
+  }
+});
+
 app.get('/api/chatbot', async (req, res) => {
   const { name = "Fuku", prompt = "Nama kamu adalah Fuku", query } = req.query;
 

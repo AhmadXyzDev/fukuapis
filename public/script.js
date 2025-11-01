@@ -135,6 +135,30 @@ document.getElementById('qu').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') document.getElementById('send-chat').click(); 
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  const tombol = document.getElementById("goreng");
+  const wadah = document.getElementById("piring");
+
+  tombol.addEventListener("click", () => {
+    const sayur = document.getElementById("sayur").value.trim();
+    const bumbu = document.getElementById("bumbu").value.trim();
+
+    if (!sayur) {
+      wadah.innerHTML = "<span style='color:red'>⚠️ Masukkan prompt terlebih dahulu!</span>";
+      return;
+    }
+
+    wadah.innerHTML = "<div class='loading'></div> <span style='color:#667eea;'>Masak gambarnya dulu bentar...</span>";
+    setTimeout(() => {
+      window.location.href = `https://fukuapis.vercel.app/api/imagen?prompt=${encodeURIComponent(sayur)}&ratio=${encodeURIComponent(bumbu || "1:1")}`;
+    }, 800);
+  });
+
+  document.getElementById("sayur").addEventListener("keypress", e => {
+    if (e.key === "Enter") tombol.click();
+  });
+});
+
 document.getElementById('convert-beton').addEventListener('click', () => {
   const urlyt = document.getElementById('urlnya').value.trim();
   const re = document.getElementById('goto');

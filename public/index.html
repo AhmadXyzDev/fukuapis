@@ -89,6 +89,27 @@
 <div class="sparkle-box">
   <div class="endpoint-header">
     <div class="endpoint-method">GET</div>
+    <h3>/api/imagen</h3>
+  </div>
+  <p>Generate AI Image dengan parameter <code>sayur</code> & <code>bumbu</code></p>
+
+  <pre class="code-block">GET https://fukuapis.vercel.app/api/imagen?prompt=A+man+is+bathing+in+the+river&ratio=1:1</pre>
+
+  <div class="try-form">
+    <div class="input-wrapper">
+      <input type="text" id="sayur" placeholder="Masukkan prompt (deskripsi gambar)...">
+    </div>
+    <div class="input-wrapper">
+      <input type="text" id="bumbu" placeholder="Masukkan ratio (contoh: 1:1)...">
+    </div>
+    <button id="goreng" class="button button-primary">Sumbit</button>
+    <div id="piring" class="result"></div>
+  </div>
+</div>
+
+<div class="sparkle-box">
+  <div class="endpoint-header">
+    <div class="endpoint-method">GET</div>
     <h3>/api/chatbot</h3>
   </div>
   <p>AI Chatbot dengan parameter <code>pre</code> & <code>qu</code></p>
@@ -102,7 +123,7 @@
     <div class="input-wrapper">
       <input type="text" id="qu" placeholder="Masukkan qu (pertanyaan)...">
     </div>
-    <button id="send-chat" class="button button-primary">Get</button>
+    <button id="send-chat" class="button button-primary">Sumbit</button>
     <div id="divRess" class="result"></div>
   </div>
 </div>
@@ -118,7 +139,7 @@
     <div class="input-wrapper">
       <input type="text" id="urlnya" placeholder="Masukkan text...">
     </div>
-    <button id="convert-beton" class="button button-primary">Get</button>
+    <button id="convert-beton" class="button button-primary">Sumbit</button>
     <div id="goto" class="result"></div>
   </div>
 </div>
@@ -134,7 +155,7 @@
     <div class="input-wrapper">
       <input type="text" id="input-text" placeholder="Masukkan text...">
     </div>
-    <button id="convert-button" class="button button-primary">🚀 Convert to Base64</button>
+    <button id="convert-button" class="button button-primary">Sumbit</button>
     <div id="result" class="result"></div>
   </div>
 </div>

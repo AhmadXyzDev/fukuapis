@@ -112,8 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const imgUrl = `https://fukuapis.vercel.app/api/brat?text=${encodeURIComponent(kaleng)}`;
     setTimeout(() => {
-      wadah.innerHTML = `<img src="${imgUrl}" style="max-width:300px; border-radius:10px; margin-top:10px;">`;
-      wadah.scrollIntoView({ behavior: "smooth" });
+      window.location.href = `https://fukuapis.vercel.app/api/brat?text=${encodeURIComponent(kaleng)}`;
     }, 800);
   });
 

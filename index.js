@@ -108,7 +108,6 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-
 app.get('/api/chatbot', async (req, res) => {
   const { name = "Fuku", prompt = "Nama kamu adalah Fuku", query } = req.query;
 
@@ -131,7 +130,7 @@ app.get('/api/chatbot', async (req, res) => {
       result: data.result,
       timestamp: data.timestamp,
       responseTime: data.responseTime,
-      creator: "Fuku-API",
+      source: "Nekolabs AI",
       madeBy: "AhmadXyz-Fukushima"
     });
   } catch (error) {
@@ -143,6 +142,7 @@ app.get('/api/chatbot', async (req, res) => {
     });
   }
 });
+
 // For future endpoints from config.json, you can add logic here to dynamically load them
 // Example: config.endpoints.forEach(endpoint => app[endpoint.method]('/api/' + endpoint.name, require('./api/' + endpoint.name)));
 

@@ -108,6 +108,41 @@ app.get('/api/status', (req, res) => {
   });
 });
 
+
+app.get('/api/chatbot', async (req, res) => {
+  const { name = "Fuku", prompt = "Nama kamu adalah Fuku", query } = req.query;
+
+  if (!query) {
+    return res.status(400).json({
+      status: false,
+      status_code: 400,
+      message: 'Missing "query" parameter'
+    });
+  }
+
+  try {
+    const apiUrl = `https://api.nekolabs.web.id/ai/chatbot?name=${encodeURIComponent(name)}&instruction=${encodeURIComponent(prompt)}&question=${encodeURIComponent(query)}`;
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    res.json({
+      status: data.success,
+      status_code: 200,
+      result: data.result,
+      timestamp: data.timestamp,
+      responseTime: data.responseTime,
+      creator: "Fuku-API",
+      madeBy: "AhmadXyz-Fukushima"
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      status_code: 500,
+      message: "Gagal menghubungi API Nekolabs",
+      error: error.message
+    });
+  }
+});
 // For future endpoints from config.json, you can add logic here to dynamically load them
 // Example: config.endpoints.forEach(endpoint => app[endpoint.method]('/api/' + endpoint.name, require('./api/' + endpoint.name)));
 

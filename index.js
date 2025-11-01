@@ -138,6 +138,15 @@ app.get("/api/imagen", async (req, res) => {
   }
 });
 
+app.get("/api/brat", (req, res) => {
+  const { text } = req.query;
+
+  if (!text) return res.status(400).send("Missing 'text' query parameter");
+
+  const url = `https://api.nekolabs.web.id/canvas/brat/v1?text=${encodeURIComponent(text)}`;
+  res.redirect(url);
+});
+
 app.get('/api/chatbot', async (req, res) => {
   const { name = "Fuku", prompt = "Nama kamu adalah Fuku", query } = req.query;
 

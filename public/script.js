@@ -98,6 +98,31 @@ document.getElementById('try-button').addEventListener('click', () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+  const tombol = document.getElementById("panggang");
+  const wadah = document.getElementById("panci");
+
+  tombol.addEventListener("click", () => {
+    const kaleng = document.getElementById("kaleng").value.trim();
+    if (!kaleng) {
+      wadah.innerHTML = "<span style='color:red'>⚠️ Masukkan teks terlebih dahulu!</span>";
+      return;
+    }
+
+    wadah.innerHTML = "<div class='loading'></div> <span style='color:#667eea;'>Membuat gambar Brat...</span>";
+
+    const imgUrl = `https://fukuapis.vercel.app/api/brat?text=${encodeURIComponent(kaleng)}`;
+    setTimeout(() => {
+      wadah.innerHTML = `<img src="${imgUrl}" style="max-width:300px; border-radius:10px; margin-top:10px;">`;
+      wadah.scrollIntoView({ behavior: "smooth" });
+    }, 800);
+  });
+
+  document.getElementById("kaleng").addEventListener("keypress", e => {
+    if (e.key === "Enter") tombol.click();
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("send-chat").addEventListener("click", () => {
     const pre = document.getElementById("pre").value.trim();
     const qu = document.getElementById("qu").value.trim();

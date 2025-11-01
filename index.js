@@ -160,7 +160,7 @@ app.get("/api/brat", async (req, res) => {
     res.status(500).json({
       status: false,
       creator: "FUKU-AHMADXYZ",
-      result: "Terjadi kesalahan saat fetch image"
+      result: "Terjadi kesalahan"
     });
   }
 });

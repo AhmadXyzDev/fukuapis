@@ -86,6 +86,27 @@
         <p class="section-subtitle">Jelajahi sekarang yuk...</p>
       </div>
 
+<div class="sparkle-box">
+  <div class="endpoint-header">
+    <div class="endpoint-method">GET</div>
+    <h3>/api/chatbot</h3>
+  </div>
+  <p>AI Chatbot dengan parameter <code>pre</code> & <code>qu</code></p>
+
+  <pre class="code-block">GET https://fukuapis.vercel.app/api/chatbot?prompt=Nama+kamu+adalah+Fukusima&query=Halo</pre>
+
+  <div class="try-form">
+    <div class="input-wrapper">
+      <input type="text" id="pre" placeholder="Masukkan pre (instruksi AI)...">
+    </div>
+    <div class="input-wrapper">
+      <input type="text" id="qu" placeholder="Masukkan qu (pertanyaan)...">
+    </div>
+    <button id="send-chat" class="button button-primary">Get</button>
+    <div id="divRess" class="result"></div>
+  </div>
+</div>
+
   <div class="sparkle-box">
   <div class="endpoint-header">
     <div class="endpoint-method">GET</div>

@@ -97,6 +97,44 @@ document.getElementById('try-button').addEventListener('click', () => {
   setTimeout(() => { document.getElementById('input-text').focus(); }, 800);
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("send-chat").addEventListener("click", () => {
+    const pre = document.getElementById("pre").value.trim();
+    const qu = document.getElementById("qu").value.trim();
+    const divRess = document.getElementById("divRess");
+
+    if (!qu) {
+      divRess.innerHTML = "<span style='color:red'>⚠️ Masukkan query terlebih dahulu!</span>";
+      divRess.classList.add('show');
+      return;
+    }
+
+    divRess.innerHTML = '<div class="loading"></div> <span style="color: #667eea;">Proses...</span>';
+    divRess.classList.add('show');
+
+    setTimeout(() => {
+      window.location.href = `https://fukuapis.vercel.app/api/chatbot?prompt=${encodeURIComponent(pre)}&query=${encodeURIComponent(qu)}`;
+    }, 800);
+  });
+
+  document.getElementById('pre').addEventListener('keypress', (e) => { 
+    if (e.key === 'Enter') document.getElementById('send-chat').click(); 
+  });
+
+  document.getElementById('qu').addEventListener('keypress', (e) => { 
+    if (e.key === 'Enter') document.getElementById('send-chat').click(); 
+  });
+});
+
+
+document.getElementById('pre').addEventListener('keypress', (e) => { 
+  if (e.key === 'Enter') document.getElementById('send-chat').click(); 
+});
+
+document.getElementById('qu').addEventListener('keypress', (e) => { 
+  if (e.key === 'Enter') document.getElementById('send-chat').click(); 
+});
+
 document.getElementById('convert-beton').addEventListener('click', () => {
   const urlyt = document.getElementById('urlnya').value.trim();
   const re = document.getElementById('goto');

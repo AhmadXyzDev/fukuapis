@@ -91,16 +91,16 @@
     <div class="endpoint-method">GET</div>
     <h3>/api/imagen</h3>
   </div>
-  <p>Generate AI Image dengan parameter <code>sayur</code> & <code>bumbu</code></p>
+  <p>Generate AI Image dengan parameter <code>prompt</code> & <code>ratio</code></p>
 
   <pre class="code-block">GET https://fukuapis.vercel.app/api/imagen?prompt=A+man+is+bathing+in+the+river&ratio=1:1</pre>
 
   <div class="try-form">
     <div class="input-wrapper">
-      <input type="text" id="sayur" placeholder="Masukkan prompt (deskripsi gambar)...">
+      <input type="text" id="sayur" placeholder="Pemandangan gunung pasir...">
     </div>
     <div class="input-wrapper">
-      <input type="text" id="bumbu" placeholder="Masukkan ratio (contoh: 1:1)...">
+      <input type="text" id="bumbu" placeholder="1:1">
     </div>
     <button id="goreng" class="button button-primary">Sumbit</button>
     <div id="piring" class="result"></div>
@@ -112,16 +112,16 @@
     <div class="endpoint-method">GET</div>
     <h3>/api/chatbot</h3>
   </div>
-  <p>AI Chatbot dengan parameter <code>pre</code> & <code>qu</code></p>
+  <p>AI Chatbot dengan parameter <code>prompt</code> & <code>pertanyaan</code></p>
 
   <pre class="code-block">GET https://fukuapis.vercel.app/api/chatbot?prompt=Nama+kamu+adalah+Fukusima&query=Halo</pre>
 
   <div class="try-form">
     <div class="input-wrapper">
-      <input type="text" id="pre" placeholder="Masukkan pre (instruksi AI)...">
+      <input type="text" id="pre" placeholder="prompt kamu....">
     </div>
     <div class="input-wrapper">
-      <input type="text" id="qu" placeholder="Masukkan qu (pertanyaan)...">
+      <input type="text" id="qu" placeholder="halo apa kabar?">
     </div>
     <button id="send-chat" class="button button-primary">Sumbit</button>
     <div id="divRess" class="result"></div>
@@ -137,7 +137,7 @@
   <pre class="code-block">GET https://fukuapis.vercel.app/api/ytmp3?url=https://example.com&quality=120</pre>
   <div class="try-form">
     <div class="input-wrapper">
-      <input type="text" id="urlnya" placeholder="Masukkan text...">
+      <input type="text" id="urlnya" placeholder="Masukkan url...">
     </div>
     <button id="convert-beton" class="button button-primary">Sumbit</button>
     <div id="goto" class="result"></div>

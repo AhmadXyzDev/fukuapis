@@ -121,8 +121,11 @@ app.get('/api/chatbot', async (req, res) => {
 
   try {
     const apiUrl = `https://api.nekolabs.web.id/ai/chatbot?name=${encodeURIComponent(name)}&instruction=${encodeURIComponent(prompt)}&question=${encodeURIComponent(query)}`;
+    console.log("[DEBUG] Nekolabs URL:", apiUrl);
+
     const response = await fetch(apiUrl);
     const data = await response.json();
+    console.log("[DEBUG] Nekolabs raw response:", data);
 
     res.json({
       status: data.success,
@@ -130,7 +133,7 @@ app.get('/api/chatbot', async (req, res) => {
       result: data.result,
       timestamp: data.timestamp,
       responseTime: data.responseTime,
-      source: "Nekolabs AI",
+      source: "FUKU-API",
       madeBy: "AhmadXyz-Fukushima"
     });
   } catch (error) {

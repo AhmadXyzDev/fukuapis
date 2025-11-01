@@ -138,13 +138,31 @@ app.get("/api/imagen", async (req, res) => {
   }
 });
 
-app.get("/api/brat", (req, res) => {
+app.get("/api/brat", async (req, res) => {
   const { text } = req.query;
 
-  if (!text) return res.status(400).send("Missing 'text' query parameter");
+  if (!text) {
+    return res.json({
+      status: true,
+      creator: "FUKU-AHMADXYZ",
+      result: "tolol text nya mana anjing"
+    });
+  }
 
-  const url = `https://api.nekolabs.web.id/canvas/brat/v1?text=${encodeURIComponent(text)}`;
-  res.redirect(url);
+  try {
+    const apiUrl = `https://api.nekolabs.web.id/canvas/brat/v1?text=${encodeURIComponent(text)}`;
+    const response = await fetch(apiUrl);
+    const buffer = await response.buffer();
+
+    res.set("Content-Type", "image/png");
+    res.send(buffer);
+  } catch (err) {
+    res.status(500).json({
+      status: false,
+      creator: "FUKU-AHMADXYZ",
+      result: "Terjadi kesalahan saat fetch image"
+    });
+  }
 });
 
 app.get('/api/chatbot', async (req, res) => {

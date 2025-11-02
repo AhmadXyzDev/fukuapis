@@ -41,9 +41,9 @@ app.get('/api/tobase64', (req, res) => {
 global.egg = "15";
 global.nestid = "5";
 global.loc = "1";
-global.domain = "https://apip.server.dong.bos.lightsecretaja.web.id";
-global.apikey = "ptla_touJHhSTvBcvlR4wEKEw8yCkpmTf4hvC8Ux6GVf8VCe";
-global.capikey = "ptlc_rN5v05ZkTYOQ9SpG3FW4hpWg6lHOJsmICCRFECYz0NP";
+global.domain = "https://zeinsukatobrut.wibusoft.my.id";
+global.apikey = "ptla_KaYMbCCOrooNiChjv7TrvfJcmcqGVAA6r5phcjg71id";
+global.capikey = "ptlc_jQfUFFPYtbt925osbkL5xUO3hNl0cVccu3lNh3D1g5a";
 
 app.get('/api/cpanel', async (req, res) => {
   const username = req.query.username;
@@ -79,7 +79,7 @@ if (!akses || !tokenPln.includes(akses)) {
     default: return res.status(400).json({ status:false, error:"Paket tidak valid" });
   }
 
-  const email = username + "@gmail.com";
+  const email = username + "@fukuapis.dev.id";
   const password = username + crypto.randomBytes(2).toString('hex');
 
   try {
@@ -126,7 +126,7 @@ if (!akses || !tokenPln.includes(akses)) {
       },
       body: JSON.stringify({
         name: username,
-        description: `Created by API`,
+        description: `Dibuat Oleh Website Api By AhmadXyz`,
         user: usr_id,
         egg: parseInt(global.egg),
         docker_image: "ghcr.io/parkervcp/yolks:nodejs_18",

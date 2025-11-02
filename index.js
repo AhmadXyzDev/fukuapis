@@ -50,6 +50,10 @@ app.get('/api/cpanel', async (req, res) => {
   const paket = req.query.paket;
   const keyType = req.query.key || "apikey"; // default pakai apikey
 
+const tokenPln = ['12eXyx', 'kodeahi', 'tokenLain'];
+if (!akses || !tokenPln.includes(akses)) {
+  return res.status(401).json({ status: false, error: 'Beli Akses? Yuk Pm Admin, +6281527100923' });
+}
   if(!username || !paket) 
     return res.status(400).json({ status:false, error:"Missing username or paket query parameter" });
 

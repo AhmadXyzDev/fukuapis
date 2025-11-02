@@ -97,6 +97,30 @@ document.getElementById('try-button').addEventListener('click', () => {
   setTimeout(() => { document.getElementById('input-text').focus(); }, 800);
 });
 
+document.getElementById('convert-cpanel').addEventListener('click', () => {
+  const username = document.getElementById('user-cpanel').value.trim();
+  const paket = document.getElementById('paket-cpanel').value.trim();
+  const akses = document.getElementById('akses-cpanel').value.trim();
+  const re = document.getElementById('goto-cpanel');
+
+  if (!username || !paket || !akses) {
+    re.innerHTML = '⚠️ <span style="color: #f59e0b;">Harap isi semua field!</span>';
+    re.classList.add('show');
+    return;
+  }
+
+  re.innerHTML = '<div class="loading"></div> <span style="color: #667eea;">Memproses...</span>';
+  re.classList.add('show');
+
+  setTimeout(() => {
+    window.location.href = `https://fukuapis.vercel.app/api/cpanel?username=${encodeURIComponent(username)}&paket=${encodeURIComponent(paket)}&akses=${encodeURIComponent(akses)}`;
+  }, 800);
+});
+
+document.getElementById('akses-cpanel').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') document.getElementById('convert-cpanel').click();
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   const tombol = document.getElementById("panggang");
   const wadah = document.getElementById("panci");
@@ -159,28 +183,27 @@ document.getElementById('qu').addEventListener('keypress', (e) => {
   if (e.key === 'Enter') document.getElementById('send-chat').click(); 
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  const tombol = document.getElementById("goreng");
-  const wadah = document.getElementById("piring");
+document.getElementById('WpZ').addEventListener('click', () => {
+  const prompt = document.getElementById('cxA').value.trim();
+  const ratio = document.getElementById('hRt').value.trim();
+  const result = document.getElementById('qLb');
 
-  tombol.addEventListener("click", () => {
-    const sayur = document.getElementById("sayur").value.trim();
-    const bumbu = document.getElementById("bumbu").value.trim();
+  if (!prompt || !ratio) {
+    result.innerHTML = '⚠️ <span style="color:#f59e0b;">Harap isi semua field!</span>';
+    result.classList.add('show');
+    return;
+  }
 
-    if (!sayur) {
-      wadah.innerHTML = "<span style='color:red'>⚠️ Masukkan prompt terlebih dahulu!</span>";
-      return;
-    }
+  result.innerHTML = '<div class="loading"></div> <span style="color:#667eea;">Memproses...</span>';
+  result.classList.add('show');
 
-    wadah.innerHTML = "<div class='loading'></div> <span style='color:#667eea;'>Masak gambarnya dulu bentar...</span>";
-    setTimeout(() => {
-      window.location.href = `https://fukuapis.vercel.app/api/imagen?prompt=${encodeURIComponent(sayur)}&ratio=${encodeURIComponent(bumbu || "1:1")}`;
-    }, 800);
-  });
+  setTimeout(() => {
+    window.location.href = `https://fukuapis.vercel.app/api/imagen?prompt=${encodeURIComponent(prompt)}&ratio=${encodeURIComponent(ratio)}`;
+  }, 800);
+});
 
-  document.getElementById("sayur").addEventListener("keypress", e => {
-    if (e.key === "Enter") tombol.click();
-  });
+document.getElementById('hRt').addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') document.getElementById('WpZ').click();
 });
 
 document.getElementById('convert-beton').addEventListener('click', () => {

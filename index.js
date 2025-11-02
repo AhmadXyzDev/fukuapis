@@ -1,6 +1,7 @@
 // index.js (Main server file)
 const express = require('express');
 const path = require('path');
+const crypto = require('crypto');
 const fs = require('fs');
 const app = express();
 const port = process.env.PORT || 3000;
@@ -35,6 +36,116 @@ app.get('/api/tobase64', (req, res) => {
     aselinya: text,
     base64
   });
+});
+
+global.egg = "15";
+global.nestid = "5";
+global.loc = "1";
+global.domain = "https://fukushima.brengsek.my.id";
+global.apikey = "ptla_4wKuCS4EI99hCWynTPfNyxYYot7Ky56ydJFon8736WO";
+
+app.get('/api/cpanel', async (req, res) => {
+  const { username, paket } = req.query;
+  if (!username || !paket) {
+    return res.status(400).json({ status: false, error: 'Missing username or paket query parameter' });
+  }
+
+  let ram, disk, cpu;
+  switch (paket.toLowerCase()) {
+    case "1gb": ram = "1000"; disk = "1000"; cpu = "40"; break;
+    case "2gb": ram = "2000"; disk = "1000"; cpu = "60"; break;
+    case "3gb": ram = "3000"; disk = "2000"; cpu = "80"; break;
+    case "4gb": ram = "4000"; disk = "2000"; cpu = "100"; break;
+    case "5gb": ram = "5000"; disk = "3000"; cpu = "120"; break;
+    case "6gb": ram = "6000"; disk = "3000"; cpu = "140"; break;
+    case "7gb": ram = "7000"; disk = "4000"; cpu = "160"; break;
+    case "8gb": ram = "8000"; disk = "4000"; cpu = "180"; break;
+    case "9gb": ram = "9000"; disk = "5000"; cpu = "200"; break;
+    case "10gb": ram = "10000"; disk = "5000"; cpu = "220"; break;
+    case "unlimited":
+    case "unli": ram = "0"; disk = "0"; cpu = "0"; break;
+    default: return res.status(400).json({ status: false, error: 'Paket tidak valid' });
+  }
+
+  try {
+    const email = username + "@gmail.com";
+    const password = username + crypto.randomBytes(2).toString('hex');
+
+    // Buat user di panel
+    const userRes = await fetch(`${global.domain}/api/application/users`, {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${global.apikey}`
+      },
+      body: JSON.stringify({
+        email,
+        username,
+        first_name: username,
+        last_name: "Server",
+        language: "en",
+        password
+      })
+    });
+
+    const userData = await userRes.json();
+    if (userData.errors) return res.status(500).json({ status: false, error: userData.errors[0] });
+
+    const userId = userData.attributes.id;
+
+    // Buat server
+    const serverRes = await fetch(`${global.domain}/api/application/servers`, {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${global.apikey}`
+      },
+      body: JSON.stringify({
+        name: username,
+        description: `Server dibuat oleh API`,
+        user: userId,
+        egg: parseInt(global.egg),
+        docker_image: "ghcr.io/parkervcp/yolks:nodejs_18",
+        startup: "npm start",
+        environment: {},
+        limits: {
+          memory: ram,
+          swap: 0,
+          disk: disk,
+          io: 500,
+          cpu: cpu
+        },
+        feature_limits: {
+          databases: 5,
+          backups: 5,
+          allocations: 5
+        },
+        deploy: {
+          locations: [parseInt(global.loc)],
+          dedicated_ip: false,
+          port_range: []
+        }
+      })
+    });
+
+    const serverData = await serverRes.json();
+    if (serverData.errors) return res.status(500).json({ status: false, error: serverData.errors[0] });
+
+    return res.json({
+      status: true,
+      username,
+      password,
+      paket,
+      ram,
+      cpu,
+      disk,
+      server_id: serverData.attributes.id
+    });
+  } catch (err) {
+    return res.status(500).json({ status: false, error: err.message });
+  }
 });
 
 app.get('/api/ytmp3', async (req, res) => {

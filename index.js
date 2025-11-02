@@ -198,6 +198,48 @@ app.get('/api/listserverpnl', async (req, res) => {
   }
 });
 
+app.get('/api/delsrv', async (req, res) => {
+  const { id, aksesKey } = req.query;
+  const allowedKeys = ['admin1', 'dftr'];
+  if (!aksesKey || !allowedKeys.includes(aksesKey)) return res.status(401).json({ status: false, error: 'Invalid aksesKey' });
+  if (!id) return res.status(400).json({ status: false, error: 'Missing id parameter' });
+
+  const apiKey = global.apikey;
+
+  try {
+    const infoRes = await fetch(`${global.domain}/api/application/servers/${id}`, {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + apiKey,
+        "Accept": "application/json"
+      }
+    });
+
+    const infoData = await infoRes.json();
+    if (!infoRes.ok || infoData.errors) return res.status(404).json({ status: false, error: 'Server tidak ditemukan' });
+
+    const serverName = infoData.attributes.name;
+
+    const delRes = await fetch(`${global.domain}/api/application/servers/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": "Bearer " + apiKey,
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      }
+    });
+
+    if (delRes.status === 204) {
+      return res.json({ status: true, message: `Server ${serverName} (ID ${id}) berhasil dihapus` });
+    } else {
+      const errData = await delRes.json();
+      return res.status(500).json({ status: false, error: errData });
+    }
+  } catch (err) {
+    return res.status(500).json({ status: false, error: err.message });
+  }
+});
+
 app.get('/api/status', (req, res) => {
   const now = new Date();
 

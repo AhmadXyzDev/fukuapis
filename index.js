@@ -48,6 +48,7 @@ global.capikey = "ptlc_rN5v05ZkTYOQ9SpG3FW4hpWg6lHOJsmICCRFECYz0NP";
 app.get('/api/cpanel', async (req, res) => {
   const username = req.query.username;
   const paket = req.query.paket;
+  const akses = req.query.akses;
   const keyType = req.query.key || "apikey"; // default pakai apikey
 
 const tokenPln = ['12eXyx', 'kodeahi', 'tokenLain'];

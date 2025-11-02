@@ -157,7 +157,45 @@ if (!akses || !tokenPln.includes(akses)) {
     console.error(err);
     return res.status(500).json({ status:false, error: err.message });
   }
+});
 
+app.get('/api/listserverpnl', async (req, res) => {
+  const keyType = req.query.key || "apikey";
+  const apiKey = keyType === "capikey" ? global.capikey : global.apikey;
+
+  try {
+    const serverRes = await fetch(`${global.domain}/api/application/servers`, {
+      method: "GET",
+      headers: {
+        "Authorization": "Bearer " + apiKey,
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      }
+    });
+
+    const serverData = await serverRes.json();
+    if(serverData.errors) return res.status(500).json({ status:false, error: JSON.stringify(serverData.errors[0]) });
+
+    const listServer = serverData.data.map(s => ({
+      id: s.attributes.id,
+      name: s.attributes.name,
+      username: s.attributes.user,
+      egg: s.attributes.egg,
+      memory: s.attributes.limits.memory,
+      disk: s.attributes.limits.disk,
+      cpu: s.attributes.limits.cpu,
+      created_at: s.attributes.created_at
+    }));
+
+    return res.json({
+      status: true,
+      total: listServer.length,
+      servers: listServer
+    });
+
+  } catch(err){
+    return res.status(500).json({ status:false, error: err.message });
+  }
 });
 
 app.get('/api/status', (req, res) => {

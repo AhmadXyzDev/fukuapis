@@ -41,43 +41,50 @@ app.get('/api/tobase64', (req, res) => {
 global.egg = "15";
 global.nestid = "5";
 global.loc = "1";
-global.domain = "https://fukushima.brengsek.my.id";
-global.apikey = "ptla_4wKuCS4EI99hCWynTPfNyxYYot7Ky56ydJFon8736WO";
+global.domain = "https://apip.server.dong.bos.lightsecretaja.web.id";
+global.apikey = "ptla_touJHhSTvBcvlR4wEKEw8yCkpmTf4hvC8Ux6GVf8VCe";
+global.capikey = "ptlc_rN5v05ZkTYOQ9SpG3FW4hpWg6lHOJsmICCRFECYz0NP";
 
 app.get('/api/cpanel', async (req, res) => {
-  const { username, paket } = req.query;
-  if (!username || !paket) {
-    return res.status(400).json({ status: false, error: 'Missing username or paket query parameter' });
+  const username = req.query.username;
+  const paket = req.query.paket;
+  const keyType = req.query.key || "apikey"; // default pakai apikey
+
+  if(!username || !paket) 
+    return res.status(400).json({ status:false, error:"Missing username or paket query parameter" });
+
+  // Pilih API key
+  const apiKey = keyType === "capikey" ? global.capikey : global.apikey;
+
+  // Tentukan limits berdasarkan paket
+  let ram, disk, cpu;
+  switch(paket.toLowerCase()){
+    case "1gb": ram="1000"; disk="1000"; cpu="40"; break;
+    case "2gb": ram="2000"; disk="1000"; cpu="60"; break;
+    case "3gb": ram="3000"; disk="2000"; cpu="80"; break;
+    case "4gb": ram="4000"; disk="2000"; cpu="100"; break;
+    case "5gb": ram="5000"; disk="3000"; cpu="120"; break;
+    case "6gb": ram="6000"; disk="3000"; cpu="140"; break;
+    case "7gb": ram="7000"; disk="4000"; cpu="160"; break;
+    case "8gb": ram="8000"; disk="4000"; cpu="180"; break;
+    case "9gb": ram="9000"; disk="5000"; cpu="200"; break;
+    case "10gb": ram="10000"; disk="5000"; cpu="220"; break;
+    case "unlimited":
+    case "unli": ram="0"; disk="0"; cpu="0"; break;
+    default: return res.status(400).json({ status:false, error:"Paket tidak valid" });
   }
 
-  let ram, disk, cpu;
-  switch (paket.toLowerCase()) {
-    case "1gb": ram = "1000"; disk = "1000"; cpu = "40"; break;
-    case "2gb": ram = "2000"; disk = "1000"; cpu = "60"; break;
-    case "3gb": ram = "3000"; disk = "2000"; cpu = "80"; break;
-    case "4gb": ram = "4000"; disk = "2000"; cpu = "100"; break;
-    case "5gb": ram = "5000"; disk = "3000"; cpu = "120"; break;
-    case "6gb": ram = "6000"; disk = "3000"; cpu = "140"; break;
-    case "7gb": ram = "7000"; disk = "4000"; cpu = "160"; break;
-    case "8gb": ram = "8000"; disk = "4000"; cpu = "180"; break;
-    case "9gb": ram = "9000"; disk = "5000"; cpu = "200"; break;
-    case "10gb": ram = "10000"; disk = "5000"; cpu = "220"; break;
-    case "unlimited":
-    case "unli": ram = "0"; disk = "0"; cpu = "0"; break;
-    default: return res.status(400).json({ status: false, error: 'Paket tidak valid' });
-  }
+  const email = username + "@gmail.com";
+  const password = username + crypto.randomBytes(2).toString('hex');
 
   try {
-    const email = username + "@gmail.com";
-    const password = username + crypto.randomBytes(2).toString('hex');
-
-    // Buat user di panel
+    // Buat user
     const userRes = await fetch(`${global.domain}/api/application/users`, {
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
+      method:"POST",
+      headers:{
+        "Authorization": "Bearer " + apiKey,
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${global.apikey}`
+        "Accept": "application/json"
       },
       body: JSON.stringify({
         email,
@@ -90,48 +97,44 @@ app.get('/api/cpanel', async (req, res) => {
     });
 
     const userData = await userRes.json();
-    if (userData.errors) return res.status(500).json({ status: false, error: userData.errors[0] });
-
-    const userId = userData.attributes.id;
+    if(userData.errors) return res.status(500).json({ status:false, error:JSON.stringify(userData.errors[0]) });
+    const usr_id = userData.attributes.id;
 
     // Buat server
+    const eggRes = await fetch(`${global.domain}/api/application/nests/${global.nestid}/eggs/${global.egg}`, {
+      method:"GET",
+      headers:{
+        "Authorization":"Bearer " + apiKey,
+        "Content-Type":"application/json",
+        "Accept":"application/json"
+      }
+    });
+    const eggData = await eggRes.json();
+    const startup_cmd = eggData.attributes.startup;
+
     const serverRes = await fetch(`${global.domain}/api/application/servers`, {
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${global.apikey}`
+      method:"POST",
+      headers:{
+        "Authorization":"Bearer " + apiKey,
+        "Content-Type":"application/json",
+        "Accept":"application/json"
       },
       body: JSON.stringify({
         name: username,
-        description: `Server dibuat oleh API`,
-        user: userId,
+        description: `Created by API`,
+        user: usr_id,
         egg: parseInt(global.egg),
         docker_image: "ghcr.io/parkervcp/yolks:nodejs_18",
-        startup: "npm start",
-        environment: {},
-        limits: {
-          memory: ram,
-          swap: 0,
-          disk: disk,
-          io: 500,
-          cpu: cpu
-        },
-        feature_limits: {
-          databases: 5,
-          backups: 5,
-          allocations: 5
-        },
-        deploy: {
-          locations: [parseInt(global.loc)],
-          dedicated_ip: false,
-          port_range: []
-        }
+        startup: startup_cmd,
+        environment: { INST:"npm", USER_UPLOAD:"0", AUTO_UPDATE:"0", JS_FILE:"index.js", CMD_RUN:"npm start" },
+        limits: { memory: ram, swap:0, disk:disk, io:500, cpu:cpu },
+        feature_limits: { databases:5, backups:5, allocations:5 },
+        deploy:{ locations:[parseInt(global.loc)], dedicated_ip:false, port_range:[] }
       })
     });
 
     const serverData = await serverRes.json();
-    if (serverData.errors) return res.status(500).json({ status: false, error: serverData.errors[0] });
+    if(serverData.errors) return res.status(500).json({ status:false, error:JSON.stringify(serverData.errors[0]) });
 
     return res.json({
       status: true,
@@ -141,63 +144,15 @@ app.get('/api/cpanel', async (req, res) => {
       ram,
       cpu,
       disk,
-      server_id: serverData.attributes.id
+      server_id: serverData.attributes.id,
+      domain: global.domain
     });
-  } catch (err) {
-    return res.status(500).json({ status: false, error: err.message });
+
+  } catch(err){
+    console.error(err);
+    return res.status(500).json({ status:false, error: err.message });
   }
-});
 
-app.get('/api/ytmp3', async (req, res) => {
-  const url = req.query.url;
-  if (!url) return res.status(400).json({ status: false, status_code: 400, error: 'Missing "url" query parameter' });
-
-  try {
-    const apiUrl = `https://api.vreden.my.id/api/v1/download/youtube/audio?url=${encodeURIComponent(url)}&quality=128`;
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    const result = data.result;
-
-    res.json({
-      status: true,
-      status_code: 200,
-      metode: "GET",
-      result: {
-        status: true,
-        MadeBy: "AhmadXyz-Fukushima",
-        metadata: {
-          type: "video",
-          videoId: result.metadata.videoId,
-          url: result.metadata.url,
-          title: result.metadata.title,
-          description: result.metadata.description,
-          image: result.metadata.image,
-          thumbnail: result.metadata.thumbnail,
-          seconds: result.metadata.duration.seconds,
-          timestamp: result.metadata.duration.timestamp,
-          duration: {
-            seconds: result.metadata.duration.seconds,
-            timestamp: result.metadata.duration.timestamp
-          },
-          ago: result.metadata.ago,
-          views: result.metadata.views,
-          author: {
-            name: result.metadata.author.name,
-            url: result.metadata.author.url
-          }
-        },
-        download: {
-          status: true,
-          quality: result.download.quality,
-          availableQuality: result.download.availableQuality,
-          url: result.download.url,
-          filename: result.download.filename
-        }
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ status: false, status_code: 500, error: err.message });
-  }
 });
 
 app.get('/api/status', (req, res) => {

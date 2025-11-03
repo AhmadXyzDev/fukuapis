@@ -41,9 +41,9 @@ app.get('/api/tobase64', (req, res) => {
 global.egg = "15";
 global.nestid = "5";
 global.loc = "1";
-global.domain = "https://zeinsukatobrut.wibusoft.my.id";
-global.apikey = "ptla_KaYMbCCOrooNiChjv7TrvfJcmcqGVAA6r5phcjg71id";
-global.capikey = "ptlc_jQfUFFPYtbt925osbkL5xUO3hNl0cVccu3lNh3D1g5a";
+global.domain = "https://apip.server.dong.bos.lightsecretaja.web.id";
+global.apikey = "ptla_touJHhSTvBcvlR4wEKEw8yCkpmTf4hvC8Ux6GVf8VCe";
+global.capikey = "ptlc_LRpWVT3wFYUzVAFVF3zZwcBd33laMVntHFq6FWPvRLN";
 
 app.get('/api/cpanel', async (req, res) => {
   const username = req.query.username;

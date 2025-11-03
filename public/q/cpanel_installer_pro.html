@@ -1,0 +1,1289 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fuku x Pterodactyl - Premium Panel Store</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --primary: #8b5cf6;
+      --primary-dark: #7c3aed;
+      --secondary: #ec4899;
+      --accent: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --dark: #0a0a0f;
+      --dark-card: #121218;
+      --dark-lighter: #1a1a24;
+      --text: #ffffff;
+      --text-muted: #a1a1aa;
+      --glass: rgba(255, 255, 255, 0.05);
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #0a0a0f;
+      color: var(--text);
+      overflow-x: hidden;
+      position: relative;
+    }
+    
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+    
+    .gradient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.6;
+      animation: float 20s infinite ease-in-out;
+    }
+    
+    .orb-1 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #8b5cf6, transparent);
+      top: -250px;
+      left: -250px;
+      animation-delay: 0s;
+    }
+    
+    .orb-2 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #ec4899, transparent);
+      bottom: -200px;
+      right: -200px;
+      animation-delay: 5s;
+    }
+    
+    .orb-3 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #06b6d4, transparent);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: 10s;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(50px, 100px) scale(1.1); }
+      50% { transform: translate(-30px, -50px) scale(0.9); }
+      75% { transform: translate(100px, -100px) scale(1.05); }
+    }
+    
+    .grid-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(139, 92, 246, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 92, 246, 0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: 0;
+      pointer-events: none;
+    }
+    
+    /* Navbar */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(10, 10, 15, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .logo-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+      animation: pulse-glow 3s infinite;
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); }
+      50% { box-shadow: 0 0 50px rgba(139, 92, 246, 0.8); }
+    }
+    
+    .logo-text {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+    
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s;
+      position: relative;
+    }
+    
+    .nav-link:hover {
+      color: var(--primary);
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: width 0.3s;
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    /* Hero Section */
+    .hero {
+      position: relative;
+      padding: 100px 40px;
+      text-align: center;
+      z-index: 1;
+    }
+    
+    .hero-title {
+      font-size: 72px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+      animation: slideUp 0.8s ease;
+      line-height: 1.2;
+    }
+    
+    .hero-subtitle {
+      font-size: 24px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      animation: slideUp 1s ease;
+    }
+    
+    .hero-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      animation: slideUp 1.2s ease;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Pricing Cards */
+    .pricing-section {
+      margin: 80px 0;
+    }
+    
+    .section-title {
+      text-align: center;
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 60px;
+      background: linear-gradient(135deg, #fff, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-bottom: 80px;
+    }
+    
+    .price-card {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.1));
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 35px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+    }
+    
+    .price-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      opacity: 0;
+      transition: opacity 0.4s;
+      z-index: -1;
+    }
+    
+    .price-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 60px rgba(139, 92, 246, 0.4);
+      border-color: var(--primary);
+    }
+    
+    .price-card:hover::before {
+      opacity: 0.15;
+    }
+    
+    .price-card.featured {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(236, 72, 153, 0.2));
+      border: 2px solid var(--primary);
+      transform: scale(1.05);
+    }
+    
+    .featured-badge {
+      position: absolute;
+      top: 20px;
+      right: -35px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 5px 40px;
+      font-size: 12px;
+      font-weight: 700;
+      transform: rotate(45deg);
+      box-shadow: 0 5px 20px rgba(139, 92, 246, 0.5);
+    }
+    
+    .plan-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+    
+    .plan-name {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .plan-price {
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+    
+    .plan-period {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    
+    .plan-features {
+      list-style: none;
+      margin-bottom: 25px;
+    }
+    
+    .plan-features li {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+    }
+    
+    .plan-features li::before {
+      content: '✓';
+      color: var(--success);
+      font-weight: 700;
+      font-size: 18px;
+    }
+    
+    /* Order Form */
+    .order-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 60px;
+    }
+    
+    @media (max-width: 1024px) {
+      .order-section {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+      .hero-title {
+        font-size: 48px;
+      }
+    }
+    
+    .glass-card {
+      background: rgba(18, 18, 24, 0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+    
+    .card-header {
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .card-title {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #fff, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      color: var(--text);
+      font-size: 15px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s;
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+    }
+    
+    input::placeholder {
+      color: var(--text-muted);
+    }
+    
+    .alert {
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: start;
+      gap: 15px;
+      animation: slideIn 0.5s;
+      border: 1px solid;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .alert-warning {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: #fbbf24;
+    }
+    
+    .alert-success {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #34d399;
+    }
+    
+    .alert-error {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #f87171;
+    }
+    
+    .btn {
+      padding: 18px 36px;
+      border: none;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-family: 'Poppins', sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .btn span {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(139, 92, 246, 0.4);
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 50px rgba(139, 92, 246, 0.6);
+    }
+    
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      flex: 1;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+    
+    .btn-success {
+      background: linear-gradient(135deg, var(--success), #059669);
+      color: white;
+      flex: 1;
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    
+    .whatsapp-btn {
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+    }
+    
+    .whatsapp-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+    }
+    
+    .result-box {
+      background: rgba(10, 10, 15, 0.6);
+      border-radius: 20px;
+      padding: 30px;
+      margin-top: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 25px;
+      animation: bounceIn 0.6s;
+    }
+    
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0.3);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .status-success {
+      background: linear-gradient(135deg, var(--success), #059669);
+      color: white;
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+    }
+    
+    .status-error {
+      background: linear-gradient(135deg, var(--danger), #dc2626);
+      color: white;
+      box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+    }
+    
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin: 25px 0;
+    }
+    
+    .info-item {
+      background: rgba(139, 92, 246, 0.1);
+      padding: 18px;
+      border-radius: 16px;
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      transition: all 0.3s;
+    }
+    
+    .info-item:hover {
+      background: rgba(139, 92, 246, 0.15);
+      transform: scale(1.02);
+    }
+    
+    .info-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    
+    .info-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      word-break: break-all;
+    }
+    
+    .loader {
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    
+    .empty-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+    
+    .empty-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    
+    .empty-desc {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+    
+    footer {
+      background: rgba(10, 10, 15, 0.8);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 40px;
+      text-align: center;
+      margin-top: 80px;
+    }
+    
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .footer-logo {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 15px;
+    }
+    
+    .footer-text {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    
+    code {
+      background: rgba(139, 92, 246, 0.2);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: var(--primary);
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+  </div>
+  <div class="grid-overlay"></div>
+  
+  <!-- Navbar -->
+  <nav>
+    <div class="nav-container">
+      <div class="logo-section">
+<div class="logo-icon">
+  <img src="https://cloud-fukushima.vercel.app/uploader/y2m0k9x8mj.jpg" alt="Logo" style="width:60px;height:60px;">
+</div>
+<div class="logo-text">Fuku x Pterodactyl</div>
+      </div>
+      <div class="nav-links">
+        <a href="#pricing" class="nav-link">Pricing</a>
+        <a href="#order" class="nav-link">Order Now</a>
+        <a href="https://wa.me/6281527100923" target="_blank" class="nav-link">Contact</a>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1 class="hero-title">FUKU<br>SERVER</h1>
+    <p class="hero-subtitle">Dari tools hingga layanan digital, semuanya ada di satu website ini</p>
+    <div class="hero-buttons">
+      <a href="#order" class="btn btn-primary">
+        <span></span>
+        <span>Get Started</span>
+      </a>
+
+    </div>
+  </section>
+  
+  <div class="container">
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+      <h4 class="section-title">Lihat Plan Server</h4>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="plan-icon">🌱</div>
+          <div class="plan-name">Starter</div>
+          <div class="plan-price">Rp 1K</div>
+          <div class="plan-period">per bulan</div>
+          <ul class="plan-features">
+            <li>1GB RAM</li>
+            <li>50% CPU</li>
+            <li>5GB Storage</li>
+            <li>24/7 Support</li>
+          </ul>
+        </div>
+        
+        <div class="price-card">
+          <div class="plan-icon">💪</div>
+          <div class="plan-name">Basic</div>
+          <div class="plan-price">Rp 2K</div>
+          <div class="plan-period">per bulan</div>
+          <ul class="plan-features">
+            <li>2GB RAM</li>
+            <li>75% CPU</li>
+            <li>10GB Storage</li>
+            <li>Priority Support</li>
+          </ul>
+        </div>
+        
+        <div class="price-card">
+          <div class="plan-icon">⚡</div>
+          <div class="plan-name">Standard</div>
+          <div class="plan-price">Rp 3K</div>
+          <div class="plan-period">per bulan</div>
+          <ul class="plan-features">
+            <li>3GB RAM</li>
+            <li>100% CPU</li>
+            <li>15GB Storage</li>
+            <li>Premium Support</li>
+          </ul>
+        </div>
+        
+        <div class="price-card">
+          <div class="plan-icon">🔥</div>
+          <div class="plan-name">Advanced</div>
+          <div class="plan-price">Rp 4K</div>
+          <div class="plan-period">per bulan</div>
+          <ul class="plan-features">
+            <li>4GB RAM</li>
+            <li>125% CPU</li>
+            <li>20GB Storage</li>
+            <li>Premium Support</li>
+          </ul>
+        </div>
+        
+        <div class="price-card featured">
+          <div class="featured-badge">POPULAR</div>
+          <div class="plan-icon">💎</div>
+          <div class="plan-name">Premium</div>
+          <div class="plan-price">Rp 5K</div>
+          <div class="plan-period">per bulan</div>
+          <ul class="plan-features">
+            <li>5GB RAM</li>
+            <li>150% CPU</li>
+            <li>25GB Storage</li>
+            <li>VIP Support</li>
+          </ul>
+        </div>
+        
+        <div class="price-card">
+          <div class="plan-icon">👑</div>
+          <div class="plan-name">Pro</div>
+          <div class="plan-price">Rp 6.5K</div>
+          <div class="plan-period">per bulan</div>
+          <ul class="plan-features">
+            <li>6GB RAM</li>
+            <li>175% CPU</li>
+            <li>30GB Storage</li>
+            <li>VIP Support</li>
+          </ul>
+        </div>
+        
+        <div class="price-card">
+          <div class="plan-icon">🎯</div>
+          <div class="plan-name">Business</div>
+          <div class="plan-price">Rp 8.9K</div>
+          <div class="plan-period">per bulan</div>
+          <ul class="plan-features">
+            <li>8GB RAM</li>
+            <li>200% CPU</li>
+            <li>40GB Storage</li>
+            <li>Dedicated Support</li>
+          </ul>
+        </div>
+        
+        <div class="price-card">
+          <div class="plan-icon">🚀</div>
+          <div class="plan-name">Enterprise</div>
+          <div class="plan-price">Rp 12K</div>
+          <div class="plan-period">per bulan</div>
+          <ul class="plan-features">
+            <li>10GB RAM</li>
+            <li>250% CPU</li>
+            <li>50GB Storage</li>
+            <li>Dedicated Support</li>
+          </ul>
+        </div>
+        
+        <div class="price-card featured">
+          <div class="featured-badge">BEST VALUE</div>
+          <div class="plan-icon">♾️</div>
+          <div class="plan-name">Unlimited</div>
+          <div class="plan-price">Rp 15K</div>
+          <div class="plan-period">per bulan</div>
+          <ul class="plan-features">
+            <li>Unlimited RAM</li>
+            <li>Unlimited CPU</li>
+            <li>Unlimited Storage</li>
+            <li>24/7 VIP Support</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Order Section -->
+    <section class="order-section" id="order">
+      <div class="glass-card">
+        <div class="card-header">
+          <h2 class="card-title">🎯 Order Panel</h2>
+          <p class="card-desc">Isi form di bawah untuk membuat panel Pterodactyl Anda</p>
+        </div>
+        
+        <div class="alert alert-warning" id="apiKeyAlert">
+          <span style="font-size: 32px;">⚠️</span>
+          <div>
+            <strong style="font-size: 16px;">Premium API Key Required</strong><br>
+            <span style="font-size: 14px;">Belum punya API Key? Hubungi kami sekarang!</span><br>
+            <a href="https://wa.me/6281527100923" target="_blank" class="whatsapp-btn" style="margin-top: 12px;">
+              <span>📱</span>
+              <span>WhatsApp: +62 815-2710-0923</span>
+            </a>
+          </div>
+        </div>
+        
+        <form id="orderForm">
+          <div class="form-group">
+            <label>
+              <span>🔑</span>
+              <span>API Key (Premium Access)</span>
+            </label>
+            <input type="password" id="apiKey" placeholder="Masukkan API key premium Anda..." />
+          </div>
+          
+          <div class="form-group">
+            <label>
+              <span>👤</span>
+              <span>Username</span>
+            </label>
+            <input type="text" id="username" placeholder="Contoh: Mrx123" />
+          </div>
+          
+          <div class="form-group">
+            <label>
+              <span>📦</span>
+              <span>Pilih Paket</span>
+            </label>
+            <select id="paket">
+              <option value="">-- Pilih Paket Hosting --</option>
+              <option value="1gb">🌱 1GB RAM - Rp 1.000/bulan</option>
+              <option value="2gb">💪 2GB RAM - Rp 2.000/bulan</option>
+              <option value="3gb">⚡ 3GB RAM - Rp 3.000/bulan</option>
+              <option value="4gb">🔥 4GB RAM - Rp 4.000/bulan</option>
+              <option value="5gb">💎 5GB RAM - Rp 5.000/bulan</option>
+              <option value="6gb">👑 6GB RAM - Rp 6.500/bulan</option>
+              <option value="8gb">🎯 8GB RAM - Rp 8.900/bulan</option>
+              <option value="10gb">🚀 10GB RAM - Rp 12.000/bulan</option>
+              <option value="unlimited">♾️ Unlimited - Rp 15.000/bulan</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>
+              <span>🌐</span>
+              <span>Proxy Server (Opsional)</span>
+            </label>
+            <select id="proxy">
+              <option value="">Direct Connection (Recommended)</option>
+              <option value="https://api.allorigins.win/raw?url=">AllOrigins Proxy</option>
+              <option value="https://cors.bridged.cc/">Bridged CORS Proxy</option>
+            </select>
+          </div>
+          
+          <button type="button" class="btn btn-primary" id="createBtn" disabled>
+            <span>🚀</span>
+            <span>Buat Panel Sekarang</span>
+          </button>
+        </form>
+      </div>
+      
+      <div class="glass-card">
+        <div class="card-header">
+          <h2 class="card-title">📊 Panel Information</h2>
+          <p class="card-desc">Detail panel Anda akan muncul di sini</p>
+        </div>
+        
+        <div class="result-box" id="resultBox">
+          <div class="empty-state">
+            <div class="empty-icon">🎮</div>
+            <div class="empty-title">Ready to Deploy</div>
+            <div class="empty-desc">Lengkapi form untuk membuat panel Pterodactyl Anda.<br>Proses hanya membutuhkan beberapa detik!</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">Fuku x Pterodactyl</div>
+      <div class="footer-text">
+        Premium Pterodactyl Panel Management System<br>
+        <strong>API Endpoint:</strong> <code>https://fukuapis.vercel.app/api/cpanel</code><br>
+        <br>
+        © 2024 Fuku x Pterodactyl. All rights reserved.<br>
+        Built with ❤️ for the community
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const apiKeyInput = document.getElementById('apiKey');
+    const usernameInput = document.getElementById('username');
+    const paketSelect = document.getElementById('paket');
+    const proxySelect = document.getElementById('proxy');
+    const createBtn = document.getElementById('createBtn');
+    const resultBox = document.getElementById('resultBox');
+    const apiKeyAlert = document.getElementById('apiKeyAlert');
+    
+    // Price mapping
+    const priceMap = {
+      '1gb': '1.000',
+      '2gb': '2.000',
+      '3gb': '3.000',
+      '4gb': '4.000',
+      '5gb': '5.000',
+      '6gb': '6.500',
+      '8gb': '8.900',
+      '10gb': '12.000',
+      'unlimited': '15.000'
+    };
+    
+    // Validation
+    function validateForm() {
+      const apiKey = apiKeyInput.value.trim();
+      const username = usernameInput.value.trim();
+      const paket = paketSelect.value;
+      
+      createBtn.disabled = !(apiKey && username && paket);
+    }
+    
+    apiKeyInput.addEventListener('input', () => {
+      validateForm();
+      apiKeyAlert.style.display = apiKeyInput.value.trim() ? 'none' : 'flex';
+    });
+    
+    usernameInput.addEventListener('input', validateForm);
+    paketSelect.addEventListener('change', validateForm);
+    
+    // Create panel
+    createBtn.addEventListener('click', async () => {
+      const apiKey = apiKeyInput.value.trim();
+      const username = usernameInput.value.trim();
+      const paket = paketSelect.value;
+      const proxy = proxySelect.value;
+      
+      if(!apiKey || !username || !paket) return;
+      
+      setLoading(true);
+      showProcessing();
+      
+      const apiUrl = `https://fukuapis.vercel.app/api/cpanel?username=${encodeURIComponent(username)}&paket=${encodeURIComponent(paket)}&akses=${encodeURIComponent(apiKey)}`;
+      const fetchUrl = proxy ? proxy + encodeURIComponent(apiUrl) : apiUrl;
+      
+      try {
+        const res = await fetch(fetchUrl, { cache: 'no-store' });
+        const contentType = res.headers.get('content-type') || '';
+        let data;
+        
+        if(contentType.includes('application/json')) {
+          data = await res.json();
+        } else {
+          const text = await res.text();
+          try { 
+            data = JSON.parse(text);
+          } catch { 
+            data = { error: 'Invalid response format', raw: text };
+          }
+        }
+        
+        if(data.status) {
+          showSuccess(data);
+        } else {
+          showError(data.error || 'Gagal membuat panel. Periksa API key Anda.');
+        }
+      } catch(err) {
+        showError('Koneksi gagal: ' + err.message + (proxy ? '' : '<br><small>Tips: Coba gunakan proxy jika terjadi error CORS</small>'));
+      } finally {
+        setLoading(false);
+      }
+    });
+    
+    function setLoading(isLoading) {
+      createBtn.disabled = isLoading;
+      if(isLoading) {
+        createBtn.innerHTML = '<div class="loader"></div><span>Memproses...</span>';
+      } else {
+        createBtn.innerHTML = '<span>🚀</span><span>Buat Panel Sekarang</span>';
+        validateForm();
+      }
+    }
+    
+    function showProcessing() {
+      resultBox.innerHTML = `
+        <div style="text-align: center; padding: 60px 20px;">
+          <div class="loader" style="width: 60px; height: 60px; border-width: 5px; margin: 0 auto 25px;"></div>
+          <div style="font-size: 22px; font-weight: 700; margin-bottom: 12px;">Creating Your Panel...</div>
+          <div style="font-size: 15px; color: var(--text-muted);">This will only take a few seconds</div>
+        </div>
+      `;
+    }
+    
+    function showSuccess(data) {
+      resultBox.innerHTML = `
+        <div class="status-badge status-success pulse">
+          <span style="font-size: 24px;">✅</span>
+          <span>Panel Created Successfully!</span>
+        </div>
+        
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">👤 Username</div>
+            <div class="info-value">${data.username || '-'}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">🔐 Password</div>
+            <div class="info-value">${data.password || '-'}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">📦 Paket</div>
+            <div class="info-value">${data.paket ? data.paket.toUpperCase() : '-'}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">💰 Harga</div>
+            <div class="info-value">Rp ${priceMap[data.paket] || '-'}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">🎮 RAM</div>
+            <div class="info-value">${data.ram || '-'}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">⚡ CPU</div>
+            <div class="info-value">${data.cpu || '-'}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">💾 Disk</div>
+            <div class="info-value">${data.disk || '-'}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">🖥️ Server ID</div>
+            <div class="info-value">${data.server_id || '-'}</div>
+          </div>
+        </div>
+        
+        ${data.domain ? `
+        <div class="info-item" style="margin: 20px 0;">
+          <div class="info-label">🌐 Domain Panel</div>
+          <div class="info-value" style="word-break: break-all;">${data.domain}</div>
+        </div>
+        ` : ''}
+        
+        <div class="btn-group">
+          <button class="btn btn-success" onclick="copyLogin('${escapeHtml(data.username)}', '${escapeHtml(data.password)}')">
+            <span>📋</span>
+            <span>Copy Login</span>
+          </button>
+          ${data.domain ? `
+          <button class="btn btn-secondary" onclick="window.open('${escapeHtml(data.domain)}', '_blank')">
+            <span>🌐</span>
+            <span>Buka Panel</span>
+          </button>
+          ` : ''}
+          <button class="btn btn-secondary" onclick='downloadJSON(${JSON.stringify(JSON.stringify(data))})'>
+            <span>💾</span>
+            <span>Download JSON</span>
+          </button>
+        </div>
+        
+        <div class="alert alert-success" style="margin-top: 25px;">
+          <span style="font-size: 28px;">🎉</span>
+          <div>
+            <strong>Selamat!</strong><br>
+            <span style="font-size: 14px;">Panel Anda telah berhasil dibuat. Silakan login menggunakan kredensial di atas.</span>
+          </div>
+        </div>
+      `;
+    }
+    
+    function showError(message) {
+      resultBox.innerHTML = `
+        <div class="status-badge status-error pulse">
+          <span style="font-size: 24px;">❌</span>
+          <span>Failed to Create Panel</span>
+        </div>
+        
+        <div class="alert alert-error">
+          <span style="font-size: 32px;">⚠️</span>
+          <div>
+            <strong style="font-size: 16px;">Error Occurred</strong><br>
+            <span style="font-size: 14px;">${message}</span>
+          </div>
+        </div>
+        
+        <div style="margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);">
+          <div style="font-weight: 700; margin-bottom: 15px; font-size: 16px;">💡 Troubleshooting Tips:</div>
+          <ul style="margin: 0; padding-left: 20px; line-height: 2; color: var(--text-muted); font-size: 14px;">
+            <li>Pastikan API key Anda valid dan masih aktif</li>
+            <li>Coba gunakan proxy server jika koneksi gagal</li>
+            <li>Username tidak boleh mengandung karakter khusus</li>
+            <li>Hubungi support jika masalah berlanjut</li>
+          </ul>
+          <a href="https://wa.me/6281527100923" target="_blank" class="whatsapp-btn" style="margin-top: 15px;">
+            <span>📱</span>
+            <span>Contact Support</span>
+          </a>
+        </div>
+      `;
+    }
+    
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+    
+    window.copyLogin = function(username, password) {
+      const text = `🔐 Login Credentials\n\n👤 Username: ${username}\n🔑 Password: ${password}\n\n✨ Panel by Fuku x Pterodactyl`;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('✅ Login credentials berhasil disalin ke clipboard!');
+      }).catch(() => {
+        alert('❌ Gagal menyalin. Silakan copy manual.');
+      });
+    };
+    
+    window.downloadJSON = function(jsonStr) {
+      const data = JSON.parse(jsonStr);
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `fuku-panel-${data.username || 'data'}-${Date.now()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    };
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if(target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+          

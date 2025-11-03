@@ -38,6 +38,44 @@ app.get('/api/tobase64', (req, res) => {
   });
 });
 
+app.get('/api/sunoaimaker', async (req, res) => {
+  const { description } = req.query;
+
+  if (!description) {
+    return res.status(400).json({
+      status: false,
+      status_code: 400,
+      message: 'Missing "description" parameter'
+    });
+  }
+
+  try {
+    const apiUrl = `https://api.nekolabs.web.id/ai/suno-v4/create?description=${encodeURIComponent(description)}`;
+    console.log("[DEBUG] fuku Suno URL:", apiUrl);
+
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    console.log("[DEBUG] Fuku Suno raw response:", data);
+
+    res.json({
+      status: data.success,
+      status_code: 200,
+      result: data.result,
+      timestamp: data.timestamp,
+      responseTime: data.responseTime,
+      source: "FUKU-API",
+      madeBy: "AhmadXyz-Fukushima"
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      status_code: 500,
+      message: "Gagal menghubungi API Nekolabs (Suno)",
+      error: error.message
+    });
+  }
+});
+
 global.egg = "15";
 global.nestid = "5";
 global.loc = "1";

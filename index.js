@@ -38,6 +38,50 @@ app.get('/api/tobase64', (req, res) => {
   });
 });
 
+app.get('/api/sunoraimaker', async (req, res) => {
+  const { description, title = "Fuku", mood = "Sad", style = "Akustik" } = req.query;
+
+  // Validasi input
+  if (!description) {
+    return res.status(400).json({
+      status: false,
+      status_code: 400,
+      message: 'Missing "description" parameter'
+    });
+  }
+
+  try {
+    // Buat URL API Nekolabs
+    const apiUrl = `https://api.nekolabs.web.id/ai/sunora/create?description=${encodeURIComponent(description)}&title=${encodeURIComponent(title)}&mood=${encodeURIComponent(mood)}&style=${encodeURIComponent(style)}`;
+    console.log("[DEBUG] Nekolabs Sunora URL:", apiUrl);
+
+    // Fetch ke API Nekolabs
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    console.log("[DEBUG] Nekolabs Sunora raw response:", data);
+
+    // Kirim response
+    res.json({
+      status: data.success,
+      status_code: 200,
+      result: data.result,
+      timestamp: data.timestamp,
+      responseTime: data.responseTime,
+      source: "FUKU-API",
+      madeBy: "AhmadXyz-Fukushima"
+    });
+
+  } catch (error) {
+    // Jika error saat fetch
+    res.status(500).json({
+      status: false,
+      status_code: 500,
+      message: "Not found",
+      error: error.message
+    });
+  }
+});
+
 app.get('/api/sunoaimaker', async (req, res) => {
   const { description } = req.query;
 

@@ -483,61 +483,61 @@ class GridPlus {
 
 // ------------------- API /api/nanobanana -------------------
 app.get("/api/nanobanana", async (req, res) => {
-  const { prompt, image } = req.query;
+  const { prompt, image, apikeyFuku } = req.query;
+  const validKeys = ["mbwq", "xyz123", "ahmadkey"];
 
-  if (!image) {
-    return res.json({
+  if (!apikeyFuku || !validKeys.includes(apikeyFuku)) {
+    return res.status(403).json({
       status: false,
       creator: "FUKU-AHMADXYZ",
-      result: "tolol link gambarnya mana",
+      message: "Apikey tidak valid atau tidak disertakan.",
+    });
+  }
+
+  if (!image) {
+    return res.status(400).json({
+      status: false,
+      creator: "FUKU-AHMADXYZ",
+      message: "tolol link gambarnya mana",
     });
   }
 
   try {
     const response = await fetch(image);
     if (!response.ok) {
-      return res.status(400).json({
+      return res.status(404).json({
         status: false,
         creator: "FUKU-AHMADXYZ",
-        error_type: "ImageFetchError",
-        result: `Gagal ambil gambar dari URL (${response.status} ${response.statusText})`,
+        message: "404 Not Found - Gagal ambil gambar dari URL",
       });
     }
 
-    // ✅ FIXED di sini
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
     const nano = new GridPlus();
     const img = await nano.edit(buffer, prompt || "stylize masterpiece");
 
-    if (!img) throw new Error("GridPlus tidak mengembalikan URL hasil gambar");
+    if (!img) {
+      return res.status(500).json({
+        status: false,
+        creator: "FUKU-AHMADXYZ",
+        message: "Terjadi kesalahan internal saat memproses gambar.",
+      });
+    }
 
     return res.json({
       status: true,
       creator: "FUKU-AHMADXYZ",
+      prompt: prompt || "stylize masterpiece",
       result: img,
     });
-  } catch (err) {
-    const errorDetail = {
-      name: err.name || "UnknownError",
-      message: err.message || "Tidak ada pesan error",
-      stack: err.stack || "Stack tidak tersedia",
-    };
 
-    if (err.response) {
-      errorDetail.axios = {
-        status: err.response.status,
-        statusText: err.response.statusText,
-        data: err.response.data,
-      };
-    }
-
-    res.status(500).json({
+  } catch {
+    return res.status(500).json({
       status: false,
       creator: "FUKU-AHMADXYZ",
       message: "Terjadi kesalahan saat memproses NanoBanana",
-      debug: errorDetail,
     });
   }
 });

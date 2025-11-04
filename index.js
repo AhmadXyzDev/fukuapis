@@ -123,10 +123,16 @@ app.get('/api/sunoaimaker', async (req, res) => {
 global.egg = "15";
 global.nestid = "5";
 global.loc = "1";
-global.domain = "https://apip.server.dong.bos.lightsecretaja.web.id";
-global.apikey = "ptla_touJHhSTvBcvlR4wEKEw8yCkpmTf4hvC8Ux6GVf8VCe";
-global.capikey = "ptlc_LRpWVT3wFYUzVAFVF3zZwcBd33laMVntHFq6FWPvRLN";
+global.domain = "https://free-panel.brengsek.my.id";
+global.apikey = "ptla_6ZMn9lZBwYNQTcGNq41N0mqmf8fbWudtSfmTQpl3nVI";
+global.capikey = "ptlc_IymvSfGTtwpTv8ubSd3jnU1pfUaLRFNcHX2e9u1rVcy";
 
+const aksesCount = {
+  promo123: 0, // max 5 kali
+  "12eXyx": null, // unlimited
+  "kodeahi": null,
+  "tokenLain": null
+};
 app.get('/api/cpanel', async (req, res) => {
   const username = req.query.username;
   const paket = req.query.paket;
@@ -137,6 +143,13 @@ const tokenPln = ['12eXyx', 'kodeahi', 'tokenLain'];
 if (!akses || !tokenPln.includes(akses)) {
   return res.status(401).json({ status: false, error: 'Beli Akses? Yuk Pm Admin, +6281527100923' });
 }
+
+if (akses === "promo123") {
+    if (aksesCount.promo123 >= 5) {
+      return res.status(403).json({ status:false, error:"Promo habis" });
+    }
+    aksesCount.promo123++; // tambah hitungan
+  }
   if(!username || !paket) 
     return res.status(400).json({ status:false, error:"Missing username or paket query parameter" });
 

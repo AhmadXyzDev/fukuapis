@@ -1,6 +1,9 @@
 // index.js (Main server file)
 const express = require('express');
 const path = require('path');
+const { fromBuffer } = require('file-type');
+const FormData = require("form-data");
+const axios = require("axios");
 const crypto = require('crypto');
 const fs = require('fs');
 const app = express();
@@ -379,6 +382,135 @@ app.get("/api/imagen", async (req, res) => {
     res.status(500).json({
       success: false,
       error: err.message
+    });
+  }
+});
+
+class GridPlus {
+  constructor() {
+    this.ins = axios.create({
+      baseURL: 'https://api.grid.plus/v1',
+      headers: {
+        'user-agent': 'Mozilla/5.0 (Android 15; Mobile; SM-F958; rv:130.0) Gecko/130.0 Firefox/130.0',
+        'X-AppID': '808645',
+        'X-Platform': 'h5',
+        'X-Version': '8.9.7',
+        'X-SessionToken': '',
+        'X-UniqueID': this.uid(),
+        'X-GhostID': this.uid(),
+        'X-DeviceID': this.uid(),
+        'X-MCC': 'id-ID',
+        sig: `XX${this.uid() + this.uid()}`
+      }
+    });
+  }
+
+  uid() {
+    return crypto.randomUUID().replace(/-/g, '');
+  }
+
+  form(dt) {
+    const form = new FormData();
+    Object.entries(dt).forEach(([key, value]) => {
+      form.append(key, String(value));
+    });
+    return form;
+  }
+
+  async upload(buff, method) {
+    try {
+      if (!Buffer.isBuffer(buff)) throw new Error('data is not buffer!');
+      const { mime, ext } = (await fromBuffer(buff)) || {};
+      const d = await this.ins.post('/ai/web/nologin/getuploadurl', this.form({
+        ext, method
+      })).then(i => i.data);
+      await axios.put(d.data.upload_url, buff, {
+        headers: {
+          'content-type': mime
+        }
+      });
+      return d.data.img_url;
+    } catch (e) {
+      throw new Error('Gagal upload gambar ke GridPlus');
+    }
+  }
+
+  async task({ path, data, sl = () => false }) {
+    const [start, interval, timeout] = [Date.now(), 3000, 60000];
+    return new Promise(async (resolve, reject) => {
+      const check = async () => {
+        if (Date.now() - start > timeout) {
+          return reject(new Error(`Polling timed out`));
+        }
+        try {
+          const dt = await this.ins({
+            url: path,
+            method: data ? 'POST' : 'GET',
+            ...(data ? { data } : {})
+          });
+          if (!!dt.errmsg?.trim()) {
+            reject(new Error(`API Error: ${dt.errmsg}`));
+          }
+          if (!!sl(dt.data)) {
+            return resolve(dt.data);
+          }
+          setTimeout(check, interval);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      check();
+    });
+  }
+
+  async edit(buff, prompt) {
+    try {
+      const up = await this.upload(buff, 'wn_aistyle_nano');
+      const dn = await this.ins.post('/ai/nano/upload', this.form({
+        prompt, url: up
+      })).then(i => i.data);
+      if (!dn.task_id) throw new Error('Task ID tidak ditemukan');
+      const res = await this.task({
+        path: `/ai/nano/get_result/${dn.task_id}`,
+        sl: (dt) => dt.code === 0 && !!dt.image_url,
+      });
+      return res.image_url;
+    } catch (e) {
+      throw new Error('Gagal memproses AI: ' + e.message);
+    }
+  }
+}
+
+// ------------------- API /api/nanobanana -------------------
+app.get("/api/nanobanana", async (req, res) => {
+  const { prompt, image } = req.query;
+
+  if (!image) {
+    return res.json({
+      status: false,
+      creator: "FUKU-AHMADXYZ",
+      result: "tolol link gambarnya mana"
+    });
+  }
+
+  try {
+    const response = await fetch(image);
+    const buffer = await response.buffer();
+
+    const nano = new GridPlus();
+    const img = await nano.edit(buffer, prompt || 'stylize masterpiece');
+
+    res.json({
+      status: true,
+      creator: "FUKU-AHMADXYZ",
+      result: img
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      status: false,
+      creator: "FUKU-AHMADXYZ",
+      result: "Terjadi kesalahan saat memproses NanoBanana"
     });
   }
 });

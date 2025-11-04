@@ -494,7 +494,6 @@ app.get("/api/nanobanana", async (req, res) => {
   }
 
   try {
-    // ambil gambar dari URL
     const response = await fetch(image);
     if (!response.ok) {
       return res.status(400).json({
@@ -505,14 +504,14 @@ app.get("/api/nanobanana", async (req, res) => {
       });
     }
 
-    const buffer = await response.buffer();
+    // ✅ FIXED di sini
+    const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
     const nano = new GridPlus();
     const img = await nano.edit(buffer, prompt || "stylize masterpiece");
 
-    if (!img) {
-      throw new Error("GridPlus tidak mengembalikan URL hasil gambar");
-    }
+    if (!img) throw new Error("GridPlus tidak mengembalikan URL hasil gambar");
 
     return res.json({
       status: true,
@@ -520,37 +519,24 @@ app.get("/api/nanobanana", async (req, res) => {
       result: img,
     });
   } catch (err) {
-    // Ambil semua informasi error secara rinci
     const errorDetail = {
       name: err.name || "UnknownError",
       message: err.message || "Tidak ada pesan error",
       stack: err.stack || "Stack tidak tersedia",
     };
 
-    // Kalau error dari Axios (GridPlus)
     if (err.response) {
       errorDetail.axios = {
         status: err.response.status,
         statusText: err.response.statusText,
-        headers: err.response.headers,
         data: err.response.data,
-      };
-    }
-
-    // Kalau error dari Fetch (Node-Fetch)
-    if (err.type && err.type === "system") {
-      errorDetail.fetch = {
-        errno: err.errno,
-        code: err.code,
-        syscall: err.syscall,
-        hostname: err.hostname,
       };
     }
 
     res.status(500).json({
       status: false,
       creator: "FUKU-AHMADXYZ",
-      message: "❌ Terjadi kesalahan saat memproses NanoBanana",
+      message: "Terjadi kesalahan saat memproses NanoBanana",
       debug: errorDetail,
     });
   }

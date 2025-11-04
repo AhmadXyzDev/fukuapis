@@ -128,7 +128,7 @@ global.apikey = "ptla_6ZMn9lZBwYNQTcGNq41N0mqmf8fbWudtSfmTQpl3nVI";
 global.capikey = "ptlc_IymvSfGTtwpTv8ubSd3jnU1pfUaLRFNcHX2e9u1rVcy";
 
 const aksesCount = {
-  promo123: 0, // max 5 kali
+  proc: 0, // max 5 kali
   "12eXyx": null, // unlimited
   "kodeahi": null,
   "tokenLain": null
@@ -139,12 +139,12 @@ app.get('/api/cpanel', async (req, res) => {
   const akses = req.query.akses;
   const keyType = req.query.key || "apikey"; // default pakai apikey
 
-const tokenPln = ['12eXyx', 'kodeahi', 'tokenLain'];
+const tokenPln = ['12eXyx', 'mbwq', 'tokenLain'];
 if (!akses || !tokenPln.includes(akses)) {
   return res.status(401).json({ status: false, error: 'Beli Akses? Yuk Pm Admin, +6281527100923' });
 }
 
-if (akses === "promo123") {
+if (akses === "proc") {
     if (aksesCount.promo123 >= 5) {
       return res.status(403).json({ status:false, error:"Promo habis" });
     }

@@ -194,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
     divRess.classList.add('show');
 
     setTimeout(() => {
-      window.location.href = `https://fukuapis.vercel.ap/api/chatbot?prompt=${encodeURIComponent(pre)}&query=${encodeURIComponent(qu)}`;
+      window.location.href = `https://www.fuku-api.my.id/api/chatbot?prompt=${encodeURIComponent(pre)}&query=${encodeURIComponent(qu)}`;
     }, 800);
   });
 

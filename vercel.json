@@ -1,20 +1,20 @@
 {
   "version": 2,
   "builds": [
+    { "src": "index.js", "use": "@vercel/node" },
+    { "src": "public/**/*", "use": "@vercel/static" }
+  ],
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/index.js" }
+  ],
+  "redirects": [
     {
-      "src": "index.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "public/**/*",
-      "use": "@vercel/static"
+      "source": "/(.*)",
+      "destination": "https://www.fuku-api.my.id/$1",
+      "permanent": true
     }
   ],
   "routes": [
-    {
-      "src": "^/api/(.*)$",
-      "dest": "/index.js"
-    },
     {
       "src": "^/(.*\\.(?:css|js|png|jpg|jpeg|gif|svg|ico|webp|mp4|webm|woff2?|ttf))$",
       "dest": "/public/$1"

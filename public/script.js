@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
     فهد.style.color = "#6366f1";
     فهد.innerHTML = "<div class='loading'></div> Loading ...";
 
-    const وصل = `https://fukuapis.vercel.app/api/nanobanana?image=${encodeURIComponent(كلم)}&prompt=${encodeURIComponent(فهم)}&apikeyFuku=${encodeURIComponent(علم)}`;
+    const وصل = `https://www.fuku-api.my.id/api/nanobanana?image=${encodeURIComponent(كلم)}&prompt=${encodeURIComponent(فهم)}&apikeyFuku=${encodeURIComponent(علم)}`;
     setTimeout(() => { window.location.href = وصل; }, 900);
   });
 
@@ -146,7 +146,7 @@ document.getElementById('convert-cpanel').addEventListener('click', () => {
   re.classList.add('show');
 
   setTimeout(() => {
-    window.location.href = `https://fukuapis.vercel.app/api/cpanel?username=${encodeURIComponent(username)}&paket=${encodeURIComponent(paket)}&akses=${encodeURIComponent(akses)}`;
+    window.location.href = `https://www.fuku-api.my.id/api/cpanel?username=${encodeURIComponent(username)}&paket=${encodeURIComponent(paket)}&akses=${encodeURIComponent(akses)}`;
   }, 800);
 });
 
@@ -167,9 +167,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     wadah.innerHTML = "<div class='loading'></div> <span style='color:#667eea;'>Loading...</span>";
 
-    const imgUrl = `https://fukuapis.vercel.app/api/brat?text=${encodeURIComponent(kaleng)}`;
+    const imgUrl = `https://www.fuku-api.my.id/api/brat?text=${encodeURIComponent(kaleng)}`;
     setTimeout(() => {
-      window.location.href = `https://fukuapis.vercel.app/api/brat?text=${encodeURIComponent(kaleng)}`;
+      window.location.href = `https://www.fuku-api.my.id/api/brat?text=${encodeURIComponent(kaleng)}`;
     }, 800);
   });
 
@@ -194,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
     divRess.classList.add('show');
 
     setTimeout(() => {
-      window.location.href = `https://fukuapis.vercel.app/api/chatbot?prompt=${encodeURIComponent(pre)}&query=${encodeURIComponent(qu)}`;
+      window.location.href = `https://fukuapis.vercel.ap/api/chatbot?prompt=${encodeURIComponent(pre)}&query=${encodeURIComponent(qu)}`;
     }, 800);
   });
 
@@ -231,7 +231,7 @@ document.getElementById('WpZ').addEventListener('click', () => {
   result.classList.add('show');
 
   setTimeout(() => {
-    window.location.href = `https://fukuapis.vercel.app/api/imagen?prompt=${encodeURIComponent(prompt)}&ratio=${encodeURIComponent(ratio)}`;
+    window.location.href = `https://www.fuku-api.my.id/api/imagen?prompt=${encodeURIComponent(prompt)}&ratio=${encodeURIComponent(ratio)}`;
   }, 800);
 });
 
@@ -249,7 +249,7 @@ document.getElementById('convert-beton').addEventListener('click', () => {
   }
   re.innerHTML = '<div class="loading"></div> <span style="color: #667eea;">Proses...</span>';
   re.classList.add('show');
-  setTimeout(() => { window.location.href = `https://fukuapis.vercel.app/api/ytmp3?url=${encodeURIComponent(urlyt)}&quality=128`; }, 800);
+  setTimeout(() => { window.location.href = `https://www.fuku-api.my.id/api/ytmp3?url=${encodeURIComponent(urlyt)}&quality=128`; }, 800);
 });
 document.getElementById('urlnya').addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('convert-beton').click(); });
 
@@ -263,7 +263,7 @@ document.getElementById('convert-button').addEventListener('click', () => {
   }
   resultDiv.innerHTML = '<div class="loading"></div> <span style="color: #667eea;">Redirecting to API...</span>';
   resultDiv.classList.add('show');
-  setTimeout(() => { window.location.href = `https://fukuapis.vercel.app/api/tobase64?text=${encodeURIComponent(inputText)}`; }, 800);
+  setTimeout(() => { window.location.href = `https://www.fuku-api.my.id/api/tobase64?text=${encodeURIComponent(inputText)}`; }, 800);
 });
 document.getElementById('input-text').addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('convert-button').click(); });
 

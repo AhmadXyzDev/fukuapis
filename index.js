@@ -501,7 +501,6 @@ app.get("/api/nanobanana", async (req, res) => {
       message: "tolol link gambarnya mana",
     });
   }
-
   try {
     const response = await fetch(image);
     if (!response.ok) {
@@ -514,7 +513,6 @@ app.get("/api/nanobanana", async (req, res) => {
 
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-
     const nano = new GridPlus();
     const img = await nano.edit(buffer, prompt || "stylize masterpiece");
 
@@ -532,7 +530,6 @@ app.get("/api/nanobanana", async (req, res) => {
       prompt: prompt || "stylize masterpiece",
       result: img,
     });
-
   } catch {
     return res.status(500).json({
       status: false,

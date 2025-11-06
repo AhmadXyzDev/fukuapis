@@ -97,6 +97,39 @@ document.getElementById('try-button').addEventListener('click', () => {
   setTimeout(() => { document.getElementById('input-text').focus(); }, 800);
 });
 
+
+document.addEventListener("DOMContentLoaded", () => {
+  const بصر = document.getElementById("U2xP5vQa");
+  const فهد = document.getElementById("R9dM6kFt");
+
+  if (!بصر || !فهد) return console.error("Elemen tidak ditemukan!");
+
+  بصر.addEventListener("click", () => {
+    const كلم = document.getElementById("Qp8zR1aX").value.trim();
+    const فهم = document.getElementById("L7yK2nWb").value.trim();
+    const علم = document.getElementById("T4hC9eZm").value.trim();
+
+    if (!كلم || !فهم || !علم) {
+      فهد.style.color = "red";
+      فهد.innerHTML = "Isi colom diatas";
+      فهد.style.opacity = 1;
+      return;
+    }
+
+    فهد.style.color = "#6366f1";
+    فهد.innerHTML = "<div class='loading'></div> Loading ...";
+
+    const وصل = `https://fukuapis.vercel.app/api/nanobanana?image=${encodeURIComponent(كلم)}&prompt=${encodeURIComponent(فهم)}&apikeyFuku=${encodeURIComponent(علم)}`;
+    setTimeout(() => { window.location.href = وصل; }, 900);
+  });
+
+  document.querySelectorAll("#Qp8zR1aX, #L7yK2nWb, #T4hC9eZm").forEach(عنصر => {
+    عنصر.addEventListener("keypress", حدث => {
+      if (حدث.key === "Enter") document.getElementById("U2xP5vQa").click();
+    });
+  });
+});
+
 document.getElementById('convert-cpanel').addEventListener('click', () => {
   const username = document.getElementById('user-cpanel').value.trim();
   const paket = document.getElementById('paket-cpanel').value.trim();
@@ -104,12 +137,12 @@ document.getElementById('convert-cpanel').addEventListener('click', () => {
   const re = document.getElementById('goto-cpanel');
 
   if (!username || !paket || !akses) {
-    re.innerHTML = '⚠️ <span style="color: #f59e0b;">Harap isi semua field!</span>';
+    re.innerHTML = ' <span style="color: #f59e0b;">Isi kolom diatas.</span>';
     re.classList.add('show');
     return;
   }
 
-  re.innerHTML = '<div class="loading"></div> <span style="color: #667eea;">Memproses...</span>';
+  re.innerHTML = '<div class="loading"></div> <span style="color: #667eea;">Loading...</span>';
   re.classList.add('show');
 
   setTimeout(() => {
@@ -128,11 +161,11 @@ document.addEventListener("DOMContentLoaded", () => {
   tombol.addEventListener("click", () => {
     const kaleng = document.getElementById("kaleng").value.trim();
     if (!kaleng) {
-      wadah.innerHTML = "<span style='color:red'>⚠️ Masukkan teks terlebih dahulu!</span>";
+      wadah.innerHTML = "<span style='color:red'>Masukkan teks terlebih dahulu!</span>";
       return;
     }
 
-    wadah.innerHTML = "<div class='loading'></div> <span style='color:#667eea;'>Membuat gambar Brat...</span>";
+    wadah.innerHTML = "<div class='loading'></div> <span style='color:#667eea;'>Loading...</span>";
 
     const imgUrl = `https://fukuapis.vercel.app/api/brat?text=${encodeURIComponent(kaleng)}`;
     setTimeout(() => {
@@ -152,7 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const divRess = document.getElementById("divRess");
 
     if (!qu) {
-      divRess.innerHTML = "<span style='color:red'>⚠️ Masukkan query terlebih dahulu!</span>";
+      divRess.innerHTML = "<span style='color:red'>Masukkan query terlebih dahulu!</span>";
       divRess.classList.add('show');
       return;
     }

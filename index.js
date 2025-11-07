@@ -142,9 +142,9 @@ app.get('/api/cpanel', async (req, res) => {
   const akses = req.query.akses;
   const keyType = req.query.key || "apikey"; // default pakai apikey
 
-const tokenPln = ['babibune', 'kelinci12', 'bulukutup'];
+const tokenPln = ['babibune', 'arahkuc', 'bulukutup'];
 if (!akses || !tokenPln.includes(akses)) {
-  return res.status(401).json({ status: false, error: 'Beli Akses? Yuk Pm Admin, +6281527100923' });
+  return res.status(401).json({ status: false, error: 'Yah:)... key salah atau voucher telah mencapai batas! silahkan buy akses ke +6281527100923 - ahmadXyz' });
 }
 
 if (akses === "proc") {

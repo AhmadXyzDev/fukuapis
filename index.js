@@ -126,9 +126,9 @@ app.get('/api/sunoaimaker', async (req, res) => {
 global.egg = "15";
 global.nestid = "5";
 global.loc = "1";
-global.domain = "https://free-panel.brengsek.my.id";
-global.apikey = "ptla_6ZMn9lZBwYNQTcGNq41N0mqmf8fbWudtSfmTQpl3nVI";
-global.capikey = "ptlc_IymvSfGTtwpTv8ubSd3jnU1pfUaLRFNcHX2e9u1rVcy";
+global.domain = "https://fukuos-prv.publicserverr.my.id";
+global.apikey = "ptla_leHxZyV3kjivW2qMehzAmWBe8dnv4GZtDLOoHHD9FLl";
+global.capikey = "ptlc_EogT4th5dkSR7XFC2D0q02yrTnKaIfklC1PP1OwBiLK";
 
 const aksesCount = {
   proc: 0, // max 5 kali
@@ -142,7 +142,7 @@ app.get('/api/cpanel', async (req, res) => {
   const akses = req.query.akses;
   const keyType = req.query.key || "apikey"; // default pakai apikey
 
-const tokenPln = ['12eXyx', 'mbwq', 'tokenLain'];
+const tokenPln = ['babibune', 'kelinci12', 'bulukutup'];
 if (!akses || !tokenPln.includes(akses)) {
   return res.status(401).json({ status: false, error: 'Beli Akses? Yuk Pm Admin, +6281527100923' });
 }

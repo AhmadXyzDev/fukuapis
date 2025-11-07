@@ -338,6 +338,57 @@ app.get('/api/delsrv', async (req, res) => {
   }
 });
 
+app.get('/api/qwentts', async (req, res) => {
+  try {
+    const { text, voice = 'Dylan' } = req.query
+    const _voice = ['Dylan', 'Sunny', 'Jada', 'Cherry', 'Ethan', 'Serena', 'Chelsie']
+
+    if (!text) return res.status(400).json({ status: false, message: 'Parameter "text" wajib diisi' })
+    if (!_voice.includes(voice)) return res.status(400).json({ status: false, message: `Voice tidak valid. Gunakan salah satu dari: ${_voice.join(', ')}` })
+
+    const session_hash = Math.random().toString(36).substring(2)
+
+    await axios.post('https://qwen-qwen-tts-demo.hf.space/gradio_api/queue/join?', {
+      data: [text, voice],
+      event_data: null,
+      fn_index: 2,
+      trigger_id: 13,
+      session_hash
+    })
+
+    const { data } = await axios.get(`https://qwen-qwen-tts-demo.hf.space/gradio_api/queue/data?session_hash=${session_hash}`)
+
+    let result = null
+    const lines = data.split('\n\n')
+    for (const line of lines) {
+      if (line.startsWith('data:')) {
+        const d = JSON.parse(line.substring(6))
+        if (d.msg === 'process_completed') {
+          result = d.output.data[0].url
+          break
+        }
+      }
+    }
+
+    if (!result) throw new Error('Gagal memproses TTS dari server Qwen')
+
+    res.json({
+      status: true,
+      api: 'Fuku-APi',
+      status_code: 200,
+      service: 'Qwen TTS',
+      voice,
+      result
+    })
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      status_code: 500,
+      message: error.message
+    })
+  }
+});
+
 app.get('/api/status', (req, res) => {
   const now = new Date();
 

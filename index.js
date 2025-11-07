@@ -132,9 +132,9 @@ global.capikey = "ptlc_EogT4th5dkSR7XFC2D0q02yrTnKaIfklC1PP1OwBiLK";
 
 const aksesCount = {
   proc: 0, // max 5 kali
-  "12eXyx": null, // unlimited
-  "kodeahi": null,
-  "tokenLain": null
+  "pantat": null, // unlimited
+  "bulitai": null,
+  "scritpkuanj": null
 };
 app.get('/api/cpanel', async (req, res) => {
   const username = req.query.username;

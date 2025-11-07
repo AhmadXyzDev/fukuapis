@@ -389,69 +389,6 @@ app.get('/api/qwentts', async (req, res) => {
   }
 });
 
-app.get('/api/ttstokoh', async (req, res) => {
-  try {
-    const { text, tokoh = 'jokowi' } = req.query
-    const _tokoh = {
-      jokowi: { speed: -30, model: 'id-ID-ArdiNeural-Male', tune: -3 },
-      megawati: { speed: -20, model: 'id-ID-GadisNeural-Female', tune: -3 },
-      prabowo: { speed: -30, model: 'id-ID-ArdiNeural-Male', tune: -3 }
-    }
-
-    if (!text) return res.status(400).json({ status: false, message: 'Parameter "text" wajib diisi' })
-    if (!Object.keys(_tokoh).includes(tokoh)) return res.status(400).json({ status: false, message: `Tokoh tidak valid. Gunakan salah satu dari: ${Object.keys(_tokoh).join(', ')}` })
-
-    const session_hash = Math.random().toString(36).substring(2)
-    await axios.post('https://deddy-tts-rvc-tokoh-indonesia.hf.space/queue/join?', {
-      data: [
-        tokoh,
-        _tokoh[tokoh].speed,
-        text,
-        _tokoh[tokoh].model,
-        _tokoh[tokoh].tune,
-        'rmvpe',
-        0.5,
-        0.33
-      ],
-      event_data: null,
-      fn_index: 0,
-      trigger_id: 20,
-      session_hash
-    })
-
-    const { data } = await axios.get(`https://deddy-tts-rvc-tokoh-indonesia.hf.space/queue/data?session_hash=${session_hash}`)
-
-    let result = null
-    const lines = data.split('\n\n')
-    for (const line of lines) {
-      if (line.startsWith('data:')) {
-        const d = JSON.parse(line.substring(6))
-        if (d.msg === 'process_completed') {
-          result = d.output.data[2].url
-          break
-        }
-      }
-    }
-
-    if (!result) throw new Error('Gagal memproses TTS tokoh dari server')
-
-    res.json({
-      status: true,
-      api: 'Fuku-APi',
-      status_code: 200,
-      service: 'TTS Tokoh Indonesia',
-      tokoh,
-      result
-    })
-  } catch (error) {
-    res.status(500).json({
-      status: false,
-      status_code: 500,
-      message: error.message
-    })
-  }
-});
-
 app.get('/api/status', (req, res) => {
   const now = new Date();
 

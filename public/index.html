@@ -228,6 +228,32 @@
   </div>
 </div>
 
+<div class="sparkle-box">
+  <div class="endpoint-header">
+    <div class="endpoint-method">GET</div>
+    <h3>/api/qwentts</h3>
+  </div>
+  <p>Tools Generate suara dari teks menggunakan <b>Qwen TTS</b>.</p>
+  <pre class="code-block">GET https://www.fuku-api.my.id/api/qwentts?text=Halo%20semua&voice=Sunny</pre>
+
+  <div class="try-form">
+    <div class="input-wrapper">
+      <input type="text" id="tts-text" placeholder="Masukkan teks untuk dibacakan...">
+      <select id="tts-voice" class="select-input">
+        <option value="Dylan">Dylan</option>
+        <option value="Sunny">Sunny</option>
+        <option value="Jada">Jada</option>
+        <option value="Cherry">Cherry</option>
+        <option value="Ethan">Ethan</option>
+        <option value="Serena">Serena</option>
+        <option value="Chelsie">Chelsie</option>
+      </select>
+    </div>
+    <button id="tts-button" class="button button-primary">Submit</button>
+    <div id="tts-result" class="result"></div>
+  </div>
+</div>
+
       <div class="endpoint">
         <div class="endpoint-header">
           <div class="endpoint-method" style="background: linear-gradient(135deg, #f59e0b, #d97706);">GET</div>

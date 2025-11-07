@@ -179,6 +179,27 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("tts-button").addEventListener("click", () => {
+    const text = document.getElementById("tts-text").value.trim();
+    const voice = document.getElementById("tts-voice").value;
+    const resultDiv = document.getElementById("tts-result");
+
+    if (!text) {
+      resultDiv.innerHTML = "<span style='color:red'>Masukkan teks terlebih dahulu!</span>";
+      resultDiv.classList.add('show');
+      return;
+    }
+
+    resultDiv.innerHTML = '<div class="loading"></div> <span style="color: #667eea;">Memproses...</span>';
+    resultDiv.classList.add('show');
+
+    setTimeout(() => {
+      window.location.href = `https://www.fuku-api.my.id/api/qwentts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}`;
+    }, 800);
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("send-chat").addEventListener("click", () => {
     const pre = document.getElementById("pre").value.trim();
     const qu = document.getElementById("qu").value.trim();

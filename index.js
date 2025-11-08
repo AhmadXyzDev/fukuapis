@@ -127,9 +127,9 @@ app.get('/api/sunoaimaker', async (req, res) => {
 global.egg = "15";
 global.nestid = "5";
 global.loc = "1";
-global.domain = "https://fukuos-prv.publicserverr.my.id";
-global.apikey = "ptla_leHxZyV3kjivW2qMehzAmWBe8dnv4GZtDLOoHHD9FLl";
-global.capikey = "ptlc_EogT4th5dkSR7XFC2D0q02yrTnKaIfklC1PP1OwBiLK";
+global.domain = "https://ahmadxyz.publicserverr.my.id";
+global.apikey = "ptla_7s6JzqBcfh0zG9TFus4wXLyqWcEfUWFUPjKL1DLtBTb";
+global.capikey = "ptlc_YB6R3mj4Dw60b81L9dTvU6dBSgUuBsSX7S4Uc7fhDBw";
 
 const aksesCount = {
   proc: 0, // max 5 kali

@@ -254,6 +254,31 @@
   </div>
 </div>
 
+<div class="sparkle-box" id="раджендра-бокс">
+  <div class="endpoint-header">
+    <div class="endpoint-method">GET</div>
+    <h3>/api/tts</h3>
+  </div>
+  <p>Tools Generate suara dari teks menggunakan <b>Ondoku TTS</b>.</p>
+  <pre class="code-block">GET https://www.fuku-api.my.id/api/tts?text=Halo%20semua&voice=id-ID-ArdiNeural&speed=1&pitch=0</pre>
+
+  <div class="try-form">
+    <div class="input-wrapper">
+      <input type="text" id="аржун-тект" placeholder="Masukkan teks untuk dibacakan...">
+      <select id="аржун-гoлoc" class="select-input">
+        <option value="id-ID-ArdiNeural">id-ID-ArdiNeural</option>
+        <option value="en-US-AdamMultilingualNeural">en-US-AdamMultilingualNeural</option>
+        <option value="ja-JP-KeitaMultilingualNeural">ja-JP-KeitaMultilingualNeural</option>
+      </select>
+      <input type="number" id="аржун-cкopocть" placeholder="1" step="0.1" min="0.3" max="4">
+      <input type="number" id="аржун-тoн" placeholder="0" step="1" min="-20" max="20">
+    </div>
+    <button id="аржун-кнопка" class="button button-primary">Submit</button>
+    <div id="аржун-peзyльтат" class="result"></div>
+  </div>
+</div>
+
+
       <div class="endpoint">
         <div class="endpoint-header">
           <div class="endpoint-method" style="background: linear-gradient(135deg, #f59e0b, #d97706);">GET</div>

@@ -200,6 +200,29 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("аржун-кнопка").addEventListener("click", () => {
+    const тект = document.getElementById("аржун-тект").value.trim();
+    const гoлoc = document.getElementById("аржун-гoлoc").value;
+    const cкopocть = document.getElementById("аржун-cкopocть").value || 1;
+    const тoн = document.getElementById("аржун-тoн").value || 0;
+    const peзyльтат = document.getElementById("аржун-peзyльтат");
+
+    if (!тект) {
+      peзyльтат.innerHTML = "<span style='color:red'>Masukkan teks terlebih dahulu!</span>";
+      peзyльтат.classList.add('show');
+      return;
+    }
+
+    peзyльтат.innerHTML = '<div class="loading"></div> <span style="color:#667eea;">Memproses...</span>';
+    peзyльтат.classList.add('show');
+
+    setTimeout(() => {
+      window.location.href = `https://www.fuku-api.my.id/api/tts?text=${encodeURIComponent(тект)}&voice=${encodeURIComponent(гoлoc)}&speed=${encodeURIComponent(cкopocть)}&pitch=${encodeURIComponent(тoн)}`;
+    }, 800);
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("send-chat").addEventListener("click", () => {
     const pre = document.getElementById("pre").value.trim();
     const qu = document.getElementById("qu").value.trim();

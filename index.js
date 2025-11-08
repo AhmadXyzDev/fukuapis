@@ -5,6 +5,7 @@ const { fromBuffer } = require('file-type');
 const FormData = require("form-data");
 const axios = require("axios");
 const crypto = require('crypto');
+const cheerio = require('cheerio');
 const fs = require('fs');
 const app = express();
 const port = process.env.PORT || 3000;
@@ -335,6 +336,64 @@ app.get('/api/delsrv', async (req, res) => {
     }
   } catch (err) {
     return res.status(500).json({ status: false, error: err.message });
+  }
+});
+
+app.get('/api/tts', async (req, res) => {
+  try {
+    const { text, voice = 'en-US-AdamMultilingualNeural', speed = 1, pitch = 0 } = req.query;
+
+    if (!text) return res.status(400).json({ status: false, message: 'Parameter "text" wajib diisi' });
+
+    const { data: voices } = await axios.get('https://raw.githubusercontent.com/rynn-k/idk/refs/heads/main/json/ondoku-voice.json');
+    if (!voices.includes(voice)) {
+      return res.status(400).json({ 
+        status: false, 
+        message: `Voice tidak valid. Gunakan salah satu dari:\n${voices.join(', ')}`
+      });
+    }
+
+    if (speed < 0.3 || speed > 4) return res.status(400).json({ status: false, message: 'Min speed: 0.3, Max speed: 4' });
+    if (pitch < -20 || pitch > 20) return res.status(400).json({ status: false, message: 'Min pitch: -20, Max pitch: 20' });
+
+    const rynn = await axios.post('https://ondoku3.com/en');
+    const $ = cheerio.load(rynn.data);
+    const token = $('input[name="csrfmiddlewaretoken"]').attr('value');
+
+    const form = new FormData();
+    form.append('text', text);
+    form.append('voice', voice);
+    form.append('speed', speed.toString());
+    form.append('pitch', pitch.toString());
+
+    const { data } = await axios.post('https://ondoku3.com/en/text_to_speech/', form, {
+      headers: {
+        cookie: rynn.headers['set-cookie'].join('; '),
+        origin: 'https://ondoku3.com',
+        referer: 'https://ondoku3.com/en/',
+        'x-csrftoken': token,
+        'x-requested-with': 'XMLHttpRequest',
+        ...form.getHeaders()
+      }
+    });
+
+    res.json({
+      status: true,
+      api: 'Fuku-APi',
+      service: 'Ondoku TTS',
+      status_code: 200,
+      voice,
+      speed,
+      pitch,
+      result: data
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      status_code: 500,
+      message: error.message
+    });
   }
 });
 

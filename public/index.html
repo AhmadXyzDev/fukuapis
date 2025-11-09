@@ -3,313 +3,257 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FukuAPI - Premium REST API Service</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
-<link rel="stylesheet" href="style.css">
-<style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
-</style>
+  <title>FukuAPI - Professional REST API Service</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+  <!-- Background Elements -->
   <div class="background"></div>
   <div class="grid-overlay"></div>
   <div class="orb orb1"></div>
   <div class="orb orb2"></div>
   <div class="orb orb3"></div>
   
+  <!-- Header -->
   <header class="header">
-    <div class="logo-container">
-      <div class="logo-icon">
-  <img src="https://cloud-fukushima.vercel.app/uploader/tlip4o71y6.jpg" alt="Logo">
-</div>
-      <div class="logo">FukuAPI</div>
-    </div>
-    <nav class="nav">
-      <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#docs">Docs</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-    <div class="status-bar">
-      <div class="status-item">
-        <div class="status-dot"></div>
-        <span id="uptime">Work 98%</span>
+    <div class="nav-container">
+      <div class="logo-container">
+        <div class="logo-icon">
+          <img src="https://cloud-fukushima.vercel.app/uploader/tlip4o71y6.jpg" alt="FukuAPI Logo">
+        </div>
+        <div class="logo">FukuAPI</div>
       </div>
-      <div class="status-item">
-  <span id="current-time">--:--:-- WIB</span>
-</div>
+      
+      <nav class="nav">
+        <ul>
+          <li><a href="#dashboard" class="nav-link active"><i class="fas fa-home"></i> Dashboard</a></li>
+          <li><a href="#apis" class="nav-link"><i class="fas fa-code"></i> API Endpoints</a></li>
+          <li><a href="#documentation" class="nav-link"><i class="fas fa-book"></i> Documentation</a></li>
+          <li><a href="#status" class="nav-link"><i class="fas fa-chart-bar"></i> Status</a></li>
+          <li><a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+        </ul>
+      </nav>
+      
+      <div class="header-actions">
+        <div class="status-bar">
+          <div class="status-item">
+            <div class="status-dot"></div>
+            <span id="uptime">Uptime: 99.9%</span>
+          </div>
+          <div class="status-item">
+            <span id="current-time">--:--:-- WIB</span>
+          </div>
+        </div>
+        <button class="theme-toggle" id="themeToggle">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+      
+      <button class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
   </header>
-  
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <nav class="mobile-nav">
+      <a href="#dashboard" class="mobile-nav-link active"><i class="fas fa-home"></i> Dashboard</a>
+      <a href="#apis" class="mobile-nav-link"><i class="fas fa-code"></i> API Endpoints</a>
+      <a href="#documentation" class="mobile-nav-link"><i class="fas fa-book"></i> Documentation</a>
+      <a href="#status" class="mobile-nav-link"><i class="fas fa-chart-bar"></i> Status</a>
+      <a href="#contact" class="mobile-nav-link"><i class="fas fa-envelope"></i> Contact</a>
+    </nav>
+  </div>
+
   <main class="main">
-    <section id="home" class="hero">
-      <div class="hero-badge">
-        <div class="badge-dot"></div>
-        <span>API v0.1 By AhmadXyz</span>
-      </div>
-      <h1 class="hero-title">Selamat datang di FUKU API.</h1>
-      <p class="hero-subtitle">Dapatkan fitur menarik dan lengkap secara gratis tanpa apikey.</p>
-      <div class="hero-buttons">
-        <button id="try-button" class="button button-primary">Start free</button>
-        <button class="button button-secondary">Dokumentasi</button>
-      </div>
-    </section>
-
-    <div class="stats">
-      <div class="stat-card">
-        <div class="stat-icon">⚡</div>
-        <div class="stat-value" id="response-time">< 50ms</div>
-        <div class="stat-label">Kecepatan respon</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🌍</div>
-        <div class="stat-value" id="requests">248</div>
-        <div class="stat-label">Request</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🔒</div>
-        <div class="stat-value">100%</div>
-        <div class="stat-label">Keamanan Pengguna</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🚀</div>
-        <div class="stat-value" id="uptime-stat">96%</div>
-        <div class="stat-label">Uptime</div>
-      </div>
-    </div>
-    
-    <section id="docs" class="docs">
-      <div class="section-header">
-        <div class="section-badge">DOKUMENTASI</div>
-        <h2 class="section-title">API Endpoints</h2>
-        <p class="section-subtitle">Jelajahi sekarang yuk...</p>
-      </div>
-
-<div class="sparkle-box">
-  <div class="endpoint-header">
-    <div class="endpoint-method">Premium GET</div>
-    <h3>/api/cpanel</h3>
-  </div>
-  <p>Buat server panel Ptero anda<code></p>
-
-  <pre class="code-block">GET https://www.fuku-api.my.id/api/cpanel?username=user&paket=1gb&akses=nama</pre>
-
-  <div class="try-form">
-    <div class="input-wrapper">
-      <input type="text" id="user-cpanel" placeholder="Masukkan username...">
-    </div>
-    <div class="input-wrapper">
-      <input type="text" id="paket-cpanel" placeholder="1gb-unlimited... contoh: 1gb">
-    </div>
-    <div class="input-wrapper">
-      <input type="text" id="akses-cpanel" placeholder="Masukkan Premium Key...">
-    </div>
-    <button id="convert-cpanel" class="button button-primary">Submit</button>
-    <div id="goto-cpanel" class="result"></div>
-  </div>
-</div>
-
-<div class="sparkle-box">
-  <div class="endpoint-header">
-    <div class="endpoint-method">Premium GET</div>
-    <h3>/api/nanobanana</h3>
-  </div>
-
-  <p>Edit gambar anda sesuai imajinasi<code>.</p>
-
-  <pre class="code-block">GET https://www.fuku-api.my.id/api/nanobanana?image=https://example.com/jdjd.jpg&prompt=cyberpunk%20style&apikeyFuku=mbwq</pre>
-
-  <div class="try-form">
-    <div class="input-wrapper">
-      <input type="text" id="Qp8zR1aX" placeholder="Masukkan URL gambar...">
-    </div>
-    <div class="input-wrapper">
-      <input type="text" id="L7yK2nWb" placeholder="Masukkan gaya prompt... contoh: cyberpunk style">
-    </div>
-    <div class="input-wrapper">
-      <input type="text" id="T4hC9eZm" placeholder="Masukkan API Key Fuku...">
-    </div>
-    <button id="U2xP5vQa" class="button button-primary">Submit</button>
-    <div id="R9dM6kFt" class="result" style="margin-top:10px;"></div>
-  </div>
-</div>
-
-
-<div class="sparkle-box">
-  <div class="endpoint-header">
-    <div class="endpoint-method">GET</div>
-    <h3>/api/imagen</h3>
-  </div>
-  <p>Generate AI Image dengan parameter <code>prompt</code> & <code>ratio</code></p>
-
-  <pre class="code-block">GET https://www.fuku-api.my.id/api/imagen?prompt=A+man+is+bathing+in+the+river&ratio=1:1</pre>
-
-  <div class="try-form">
-    <div class="input-wrapper">
-      <input type="text" id="cxA" placeholder="Pemandangan gunung pasir...">
-    </div>
-    <div class="input-wrapper">
-      <input type="text" id="hRt" placeholder="1:1">
-    </div>
-    <button id="WpZ" class="button button-primary">Submit</button>
-    <div id="qLb" class="result"></div>
-  </div>
-</div>
-
-<div class="sparkle-box">
-  <div class="endpoint-header">
-    <div class="endpoint-method">GET</div>
-    <h3>/api/chatbot</h3>
-  </div>
-  <p>AI Chatbot dengan parameter <code>prompt</code> & <code>pertanyaan</code></p>
-
-  <pre class="code-block">GET https://www.fuku-api.my.id/api/chatbot?prompt=Nama+kamu+adalah+Fukusima&query=Halo</pre>
-
-  <div class="try-form">
-    <div class="input-wrapper">
-      <input type="text" id="pre" placeholder="prompt kamu....">
-    </div>
-    <div class="input-wrapper">
-      <input type="text" id="qu" placeholder="halo apa kabar?">
-    </div>
-    <button id="send-chat" class="button button-primary">Sumbit</button>
-    <div id="divRess" class="result"></div>
-  </div>
-</div>
-
-  <div class="sparkle-box">
-  <div class="endpoint-header">
-    <div class="endpoint-method">GET</div>
-    <h3>/api/ytmp3</h3>
-  </div>
-  <p>Downloader YouTube Audio</p>
-  <pre class="code-block">GET https://www.fuku-api.my.id/api/ytmp3?url=https://example.com&quality=120</pre>
-  <div class="try-form">
-    <div class="input-wrapper">
-      <input type="text" id="urlnya" placeholder="Masukkan url...">
-    </div>
-    <button id="convert-beton" class="button button-primary">Sumbit</button>
-    <div id="goto" class="result"></div>
-  </div>
-</div>
-
-<div class="sparkle-box">
-  <div class="endpoint-header">
-    <div class="endpoint-method">GET</div>
-    <h3>/api/brat</h3>
-  </div>
-  <p>Generate gambar Brat dari teks, parameter <code>kaleng</code></p>
-
-  <pre class="code-block">GET https://www.fuku-api.my.id/api/brat?text=Halo</pre>
-
-  <div class="try-form">
-    <div class="input-wrapper">
-      <input type="text" id="kaleng" placeholder="Masukkan teks untuk Brat...">
-    </div>
-    <button id="panggang" class="button button-primary">Generate</button>
-    <div id="panci" class="result"></div>
-  </div>
-</div>
-
-  <div class="sparkle-box">
-  <div class="endpoint-header">
-    <div class="endpoint-method">GET</div>
-    <h3>/api/tobase64</h3>
-  </div>
-  <p>Tools Convert text tobase64.</p>
-  <pre class="code-block">GET https://www.fuku-api.my.id/api/tobase64?text=your_text_here</pre>
-  <div class="try-form">
-    <div class="input-wrapper">
-      <input type="text" id="input-text" placeholder="Masukkan text...">
-    </div>
-    <button id="convert-button" class="button button-primary">Sumbit</button>
-    <div id="result" class="result"></div>
-  </div>
-</div>
-
-<div class="sparkle-box">
-  <div class="endpoint-header">
-    <div class="endpoint-method">GET</div>
-    <h3>/api/qwentts</h3>
-  </div>
-  <p>Tools Generate suara dari teks menggunakan <b>Qwen TTS</b>.</p>
-  <pre class="code-block">GET https://www.fuku-api.my.id/api/qwentts?text=Halo%20semua&voice=Sunny</pre>
-
-  <div class="try-form">
-    <div class="input-wrapper">
-      <input type="text" id="tts-text" placeholder="Masukkan teks untuk dibacakan...">
-      <select id="tts-voice" class="select-input">
-        <option value="Dylan">Dylan</option>
-        <option value="Sunny">Sunny</option>
-        <option value="Jada">Jada</option>
-        <option value="Cherry">Cherry</option>
-        <option value="Ethan">Ethan</option>
-        <option value="Serena">Serena</option>
-        <option value="Chelsie">Chelsie</option>
-      </select>
-    </div>
-    <button id="tts-button" class="button button-primary">Submit</button>
-    <div id="tts-result" class="result"></div>
-  </div>
-</div>
-
-<div class="sparkle-box" id="раджендра-бокс">
-  <div class="endpoint-header">
-    <div class="endpoint-method">GET</div>
-    <h3>/api/tts</h3>
-  </div>
-  <p>Tools Generate suara dari teks menggunakan <b>Ondoku TTS</b>.</p>
-  <pre class="code-block">GET https://www.fuku-api.my.id/api/tts?text=Halo%20semua&voice=id-ID-ArdiNeural&speed=1&pitch=0</pre>
-
-  <div class="try-form">
-    <div class="input-wrapper">
-      <input type="text" id="аржун-тект" placeholder="Masukkan teks untuk dibacakan...">
-      <select id="аржун-гoлoc" class="select-input">
-        <option value="id-ID-ArdiNeural">id-ID-ArdiNeural</option>
-        <option value="en-US-AdamMultilingualNeural">en-US-AdamMultilingualNeural</option>
-        <option value="ja-JP-KeitaMultilingualNeural">ja-JP-KeitaMultilingualNeural</option>
-      </select>
-      <input type="number" id="аржун-cкopocть" placeholder="1" step="0.1" min="0.3" max="4">
-      <input type="number" id="аржун-тoн" placeholder="0" step="1" min="-20" max="20">
-    </div>
-    <button id="аржун-кнопка" class="button button-primary">Submit</button>
-    <div id="аржун-peзyльтат" class="result"></div>
-  </div>
-</div>
-
-
-      <div class="endpoint">
-        <div class="endpoint-header">
-          <div class="endpoint-method" style="background: linear-gradient(135deg, #f59e0b, #d97706);">GET</div>
-          <h3>/api/status</h3>
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="dashboard-section active">
+      <div class="dashboard-hero">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <div class="badge-dot"></div>
+            <span>API v1.0 • By AhmadXyz</span>
+          </div>
+          <h1 class="hero-title">Professional REST API Service</h1>
+          <p class="hero-subtitle">High-performance APIs with 99.9% uptime. Free access to powerful features including AI image generation, text-to-speech, and media processing.</p>
+          <div class="hero-stats">
+            <div class="stat">
+              <div class="stat-number" id="total-requests">10M+</div>
+              <div class="stat-label">Total Requests</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number" id="response-time">< 50ms</div>
+              <div class="stat-label">Avg Response</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number" id="uptime-percent">99.9%</div>
+              <div class="stat-label">Uptime</div>
+            </div>
+          </div>
+          <div class="hero-buttons">
+            <button class="btn btn-primary" onclick="scrollToSection('apis')">
+              <i class="fas fa-rocket"></i> Explore APIs
+            </button>
+            <button class="btn btn-secondary" onclick="scrollToSection('documentation')">
+              <i class="fas fa-book"></i> View Docs
+            </button>
+          </div>
         </div>
-        <p>Cek status FUKU API mulai dari waktu uptime, tanggal dll.</p>
-        <pre class="code-block">GET https://www.fuku-api.my.id/api/status</pre>
+        <div class="hero-visual">
+          <div class="api-visual">
+            <div class="endpoint-card visual-card">
+              <div class="endpoint-method">GET</div>
+              <div class="endpoint-path">/api/imagen</div>
+              <div class="endpoint-desc">AI Image Generation</div>
+            </div>
+            <div class="endpoint-card visual-card">
+              <div class="endpoint-method">GET</div>
+              <div class="endpoint-path">/api/tts</div>
+              <div class="endpoint-desc">Text-to-Speech</div>
+            </div>
+            <div class="endpoint-card visual-card">
+              <div class="endpoint-method">GET</div>
+              <div class="endpoint-path">/api/chatbot</div>
+              <div class="endpoint-desc">AI Chatbot</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <h2 class="section-title">Quick Access</h2>
+        <div class="actions-grid">
+          <div class="action-card" onclick="scrollToSection('apis')">
+            <div class="action-icon">
+              <i class="fas fa-code"></i>
+            </div>
+            <h3>API Endpoints</h3>
+            <p>Explore all available APIs</p>
+          </div>
+          <div class="action-card" onclick="scrollToSection('documentation')">
+            <div class="action-icon">
+              <i class="fas fa-book"></i>
+            </div>
+            <h3>Documentation</h3>
+            <p>Detailed API guides</p>
+          </div>
+          <div class="action-card" onclick="scrollToSection('status')">
+            <div class="action-icon">
+              <i class="fas fa-chart-bar"></i>
+            </div>
+            <h3>Status Monitor</h3>
+            <p>Real-time API status</p>
+          </div>
+          <div class="action-card" onclick="openApiTester()">
+            <div class="action-icon">
+              <i class="fas fa-terminal"></i>
+            </div>
+            <h3>API Tester</h3>
+            <p>Test endpoints directly</p>
+          </div>
+        </div>
       </div>
     </section>
-    
-    <section id="contact" class="contact">
+
+    <!-- API Endpoints Section -->
+    <section id="apis" class="api-section">
       <div class="section-header">
-        <div class="section-badge">GET IN TOUCH</div>
-        <h2 class="section-title">Contact Us</h2>
-        <p class="section-subtitle">Ingin membantu menambahkan fitur? silahkan hub kami.</p>
+        <div class="section-badge">API ENDPOINTS</div>
+        <h2 class="section-title">Available APIs</h2>
+        <p class="section-subtitle">Powerful endpoints for your applications</p>
       </div>
-      <form id="contact-form">
-        <input type="email" placeholder="Your email address" required>
-        <textarea placeholder="Tell us about your project or question..." required></textarea>
-        <button type="submit" class="button button-primary">Kirim pesan</button>
-      </form>
+
+      <!-- API Cards will be dynamically generated by JavaScript -->
+      <div class="api-grid" id="apiGrid">
+        <!-- APIs will be loaded here -->
+      </div>
+    </section>
+
+    <!-- Documentation Section -->
+    <section id="documentation" class="docs-section">
+      <div class="section-header">
+        <div class="section-badge">DOCUMENTATION</div>
+        <h2 class="section-title">API Documentation</h2>
+        <p class="section-subtitle">Complete guides and examples</p>
+      </div>
+      <div class="docs-content">
+        <!-- Documentation will be loaded here -->
+      </div>
+    </section>
+
+    <!-- Status Section -->
+    <section id="status" class="status-section">
+      <div class="section-header">
+        <div class="section-badge">SYSTEM STATUS</div>
+        <h2 class="section-title">Real-time Monitoring</h2>
+        <p class="section-subtitle">Current system performance and health</p>
+      </div>
+      <div class="status-grid">
+        <!-- Status will be loaded here -->
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+      <div class="section-header">
+        <div class="section-badge">CONTACT US</div>
+        <h2 class="section-title">Get In Touch</h2>
+        <p class="section-subtitle">Have questions? We'd love to hear from you</p>
+      </div>
+      <div class="contact-content">
+        <form class="contact-form" id="contactForm">
+          <div class="form-group">
+            <input type="text" placeholder="Your Name" required>
+          </div>
+          <div class="form-group">
+            <input type="email" placeholder="Your Email" required>
+          </div>
+          <div class="form-group">
+            <textarea placeholder="Your Message" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-paper-plane"></i> Send Message
+          </button>
+        </form>
+      </div>
     </section>
   </main>
-  
+
+  <!-- API Tester Modal -->
+  <div class="modal" id="apiTesterModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>API Tester</h3>
+        <button class="modal-close" id="closeTester">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tester-interface">
+          <!-- Tester will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer class="footer">
     <div class="footer-content">
-      <div class="footer-logo">🚀 FukuAPI</div>
-      <p class="footer-text">&copy; 2025 FukuAPI.</p>
-      <p class="footer-text" style="margin-top: 0.5rem; font-size: 0.8rem;">Made By AhmadXyz</p>
+      <div class="footer-logo">
+        <img src="https://cloud-fukushima.vercel.app/uploader/tlip4o71y6.jpg" alt="FukuAPI">
+        <span>FukuAPI</span>
+      </div>
+      <p class="footer-text">&copy; 2025 FukuAPI. All rights reserved.</p>
+      <p class="footer-credit">Made with ❤️ by AhmadXyz</p>
     </div>
   </footer>
+
   <script src="script.js"></script>
 </body>
 </html>

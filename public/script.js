@@ -1,373 +1,502 @@
-function createParticles() {
-  const particleCount = 80;
-  for (let i = 0; i < particleCount; i++) {
-    const particle = document.createElement('div');
-    particle.className = 'particle';
-    particle.style.left = Math.random() * 100 + '%';
-    particle.style.top = Math.random() * 100 + '%';
-    particle.style.animationDelay = Math.random() * 6 + 's';
-    particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
-    const size = Math.random() * 3 + 1;
-    particle.style.width = size + 'px';
-    particle.style.height = size + 'px';
-    const colors = ['#667eea', '#764ba2', '#f43f5e', '#4ade80', '#3b82f6'];
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    particle.style.background = color;
-    particle.style.boxShadow = `0 0 10px ${color}`;
-    particle.style.animation = `float ${Math.random() * 8 + 6}s infinite ease-in-out`;
-    document.body.appendChild(particle);
-  }
+// Global State
+const state = {
+    currentSection: 'dashboard',
+    theme: 'dark',
+    apiEndpoints: [
+        {
+            method: 'GET',
+            path: '/api/imagen',
+            description: 'Generate AI Image dengan parameter prompt & ratio',
+            parameters: [
+                { name: 'prompt', type: 'string', required: true },
+                { name: 'ratio', type: 'string', required: true }
+            ],
+            example: 'https://www.fuku-api.my.id/api/imagen?prompt=A+beautiful+landscape&ratio=1:1'
+        },
+        {
+            method: 'GET',
+            path: '/api/chatbot',
+            description: 'AI Chatbot dengan parameter prompt & query',
+            parameters: [
+                { name: 'prompt', type: 'string', required: false },
+                { name: 'query', type: 'string', required: true }
+            ],
+            example: 'https://www.fuku-api.my.id/api/chatbot?prompt=You+are+helpful+assistant&query=Hello'
+        },
+        {
+            method: 'GET',
+            path: '/api/tts',
+            description: 'Text-to-Speech dengan berbagai voice options',
+            parameters: [
+                { name: 'text', type: 'string', required: true },
+                { name: 'voice', type: 'string', required: false },
+                { name: 'speed', type: 'number', required: false },
+                { name: 'pitch', type: 'number', required: false }
+            ],
+            example: 'https://www.fuku-api.my.id/api/tts?text=Hello+World&voice=id-ID-ArdiNeural'
+        },
+        {
+            method: 'GET',
+            path: '/api/qwentts',
+            description: 'Text-to-Speech menggunakan Qwen TTS',
+            parameters: [
+                { name: 'text', type: 'string', required: true },
+                { name: 'voice', type: 'string', required: false }
+            ],
+            example: 'https://www.fuku-api.my.id/api/qwentts?text=Hello+World&voice=Sunny'
+        },
+        {
+            method: 'GET',
+            path: '/api/ytmp3',
+            description: 'YouTube to MP3 Downloader',
+            parameters: [
+                { name: 'url', type: 'string', required: true },
+                { name: 'quality', type: 'string', required: false }
+            ],
+            example: 'https://www.fuku-api.my.id/api/ytmp3?url=https://youtube.com/watch?v=example'
+        },
+        {
+            method: 'GET',
+            path: '/api/brat',
+            description: 'Generate gambar Brat dari teks',
+            parameters: [
+                { name: 'text', type: 'string', required: true }
+            ],
+            example: 'https://www.fuku-api.my.id/api/brat?text=Hello+World'
+        },
+        {
+            method: 'GET',
+            path: '/api/tobase64',
+            description: 'Convert text to Base64',
+            parameters: [
+                { name: 'text', type: 'string', required: true }
+            ],
+            example: 'https://www.fuku-api.my.id/api/tobase64?text=Hello+World'
+        },
+        {
+            method: 'GET',
+            path: '/api/nanobanana',
+            description: 'Edit gambar dengan AI (Premium)',
+            parameters: [
+                { name: 'image', type: 'string', required: true },
+                { name: 'prompt', type: 'string', required: true },
+                { name: 'apikeyFuku', type: 'string', required: true }
+            ],
+            example: 'https://www.fuku-api.my.id/api/nanobanana?image=URL&prompt=style&apikeyFuku=key'
+        },
+        {
+            method: 'GET',
+            path: '/api/cpanel',
+            description: 'Buat server panel Ptero (Premium)',
+            parameters: [
+                { name: 'username', type: 'string', required: true },
+                { name: 'paket', type: 'string', required: true },
+                { name: 'akses', type: 'string', required: true }
+            ],
+            example: 'https://www.fuku-api.my.id/api/cpanel?username=user&paket=1gb&akses=key'
+        },
+        {
+            method: 'GET',
+            path: '/api/status',
+            description: 'Cek status FUKU API',
+            parameters: [],
+            example: 'https://www.fuku-api.my.id/api/status'
+        }
+    ]
+};
+
+// DOM Ready
+document.addEventListener('DOMContentLoaded', function() {
+    initializeApp();
+    createParticles();
+    startTimeUpdates();
+    initializeEventListeners();
+    renderAPIEndpoints();
+    initializeIntersectionObserver();
+});
+
+// Initialize Application
+function initializeApp() {
+    // Set initial theme
+    const savedTheme = localStorage.getItem('fukuapi-theme') || 'dark';
+    setTheme(savedTheme);
+    
+    // Show initial section
+    showSection('dashboard');
 }
-createParticles();
+
+// Theme Management
+function setTheme(theme) {
+    state.theme = theme;
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('fukuapi-theme', theme);
+    
+    const themeIcon = document.querySelector('#themeToggle i');
+    themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+}
+
+function toggleTheme() {
+    const newTheme = state.theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+}
+
+// Navigation
+function showSection(sectionId) {
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Show target section
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
+    
+    // Update navigation
+    document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${sectionId}`) {
+            link.classList.add('active');
+        }
+    });
+    
+    state.currentSection = sectionId;
+}
+
+function scrollToSection(sectionId) {
+    showSection(sectionId);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Mobile Menu
+function toggleMobileMenu() {
+    const mobileMenu = document.getElementById('mobileMenu');
+    const hamburger = document.getElementById('hamburger');
+    
+    mobileMenu.classList.toggle('active');
+    hamburger.classList.toggle('active');
+    
+    // Animate hamburger
+    const spans = hamburger.querySelectorAll('span');
+    if (hamburger.classList.contains('active')) {
+        spans[0].style.transform = 'rotate(45deg) translate(6px, 6px)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
+    } else {
+        spans[0].style.transform = 'none';
+        spans[1].style.opacity = '1';
+        spans[2].style.transform = 'none';
+    }
+}
+
+// Background Effects
+function createParticles() {
+    const particleCount = 50;
+    const container = document.body;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // Random position
+        particle.style.left = Math.random() * 100 + 'vw';
+        particle.style.top = Math.random() * 100 + 'vh';
+        
+        // Random size
+        const size = Math.random() * 3 + 1;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        
+        // Random color
+        const colors = ['#667eea', '#764ba2', '#f43f5e', '#4ade80', '#3b82f6'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        particle.style.background = color;
+        particle.style.boxShadow = `0 0 10px ${color}`;
+        
+        // Random animation
+        const duration = Math.random() * 8 + 6;
+        const delay = Math.random() * 5;
+        particle.style.animation = `float ${duration}s infinite ease-in-out ${delay}s`;
+        
+        container.appendChild(particle);
+    }
+}
+
+// Time Updates
+function startTimeUpdates() {
+    updateTime();
+    updateUptime();
+    updateStats();
+    
+    setInterval(updateTime, 1000);
+    setInterval(updateUptime, 1000);
+    setInterval(updateStats, 5000);
+}
 
 function updateTime() {
-  const now = new Date();
-  const options = { timeZone: 'Asia/Jakarta', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-  const timeString = now.toLocaleTimeString('id-ID', options);
-  const dayOptions = { timeZone: 'Asia/Jakarta', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  const dayString = now.toLocaleDateString('id-ID', dayOptions);
-  document.getElementById('current-time').textContent = `${timeString} WIB | ${dayString}`;
+    const now = new Date();
+    const options = { 
+        timeZone: 'Asia/Jakarta', 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit', 
+        hour12: false 
+    };
+    const timeString = now.toLocaleTimeString('id-ID', options);
+    document.getElementById('current-time').textContent = `${timeString} WIB`;
 }
-updateTime();
-setInterval(updateTime, 1000);
 
-const startTime = new Date();
 function updateUptime() {
-  const now = new Date();
-  const diffMs = now - startTime;
-  const diffHrs = Math.floor(diffMs / 3600000);
-  const diffMins = Math.floor((diffMs % 3600000) / 60000);
-  const diffSecs = Math.floor((diffMs % 60000) / 1000);
-  document.getElementById('uptime').textContent = `Uptime: ${diffHrs}h ${diffMins}m ${diffSecs}s`;
-}
-setInterval(updateUptime, 1000);
-
-function animateCounter(element, target, suffix = '') {
-  let current = 0;
-  const increment = target / 100;
-  const timer = setInterval(() => {
-    current += increment;
-    if (current >= target) {
-      element.textContent = target + suffix;
-      clearInterval(timer);
-    } else {
-      element.textContent = Math.floor(current) + suffix;
+    // Simulate uptime calculation
+    const uptimeElement = document.getElementById('uptime');
+    if (uptimeElement) {
+        const hours = Math.floor(performance.now() / 3600000);
+        const minutes = Math.floor((performance.now() % 3600000) / 60000);
+        uptimeElement.textContent = `Uptime: ${hours}h ${minutes}m`;
     }
-  }, 20);
 }
 
-const observerOptions = { threshold: 0.2, rootMargin: '0px 0px -100px 0px' };
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
-      if (entry.target.classList.contains('stat-card')) {
-        const valueEl = entry.target.querySelector('.stat-value');
-        const text = valueEl.textContent;
-        if (text.includes('ms')) animateCounter(valueEl, 50, 'ms');
-        else if (text.includes('M+')) animateCounter(valueEl, 10, 'M+');
-        else if (text.includes('%')) {
-          const value = parseFloat(text);
-          let current = 0;
-          const timer = setInterval(() => {
-            current += 0.5;
-            if (current >= value) {
-              valueEl.textContent = value + '%';
-              clearInterval(timer);
-            } else {
-              valueEl.textContent = current.toFixed(2) + '%';
-            }
-          }, 20);
-        }
-      }
+function updateStats() {
+    // Animate response time
+    const responseTime = document.getElementById('response-time');
+    if (responseTime) {
+        const randomMs = Math.floor(Math.random() * 20) + 40;
+        responseTime.textContent = `< ${randomMs}ms`;
     }
-  });
-}, observerOptions);
-
-document.querySelectorAll('.endpoint, .contact, .stat-card').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(50px)';
-  el.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
-  observer.observe(el);
-});
-
-document.getElementById('try-button').addEventListener('click', () => {
-  document.getElementById('docs').scrollIntoView({ behavior: 'smooth' });
-  setTimeout(() => { document.getElementById('input-text').focus(); }, 800);
-});
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const بصر = document.getElementById("U2xP5vQa");
-  const فهد = document.getElementById("R9dM6kFt");
-
-  if (!بصر || !فهد) return console.error("Elemen tidak ditemukan!");
-
-  بصر.addEventListener("click", () => {
-    const كلم = document.getElementById("Qp8zR1aX").value.trim();
-    const فهم = document.getElementById("L7yK2nWb").value.trim();
-    const علم = document.getElementById("T4hC9eZm").value.trim();
-
-    if (!كلم || !فهم || !علم) {
-      فهد.style.color = "red";
-      فهد.innerHTML = "Isi colom diatas";
-      فهد.style.opacity = 1;
-      return;
+    
+    // Animate total requests
+    const totalRequests = document.getElementById('total-requests');
+    if (totalRequests) {
+        const current = parseInt(totalRequests.textContent) || 10000000;
+        const increment = Math.floor(Math.random() * 1000);
+        totalRequests.textContent = (current + increment).toLocaleString() + '+';
     }
+}
 
-    فهد.style.color = "#6366f1";
-    فهد.innerHTML = "<div class='loading'></div> Loading ...";
+// API Endpoints Rendering
+function renderAPIEndpoints() {
+    const apiGrid = document.getElementById('apiGrid');
+    if (!apiGrid) return;
+    
+    apiGrid.innerHTML = state.apiEndpoints.map(endpoint => `
+        <div class="api-card" data-endpoint="${endpoint.path}">
+            <div class="api-header">
+                <div class="api-method">${endpoint.method}</div>
+                <div class="api-path">${endpoint.path}</div>
+            </div>
+            <div class="api-description">${endpoint.description}</div>
+            
+            ${endpoint.parameters.length > 0 ? `
+                <div class="api-parameters">
+                    ${endpoint.parameters.map(param => `
+                        <div class="parameter">
+                            <span class="param-name">${param.name}</span>
+                            <span class="param-type">${param.required ? 'required' : 'optional'} • ${param.type}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            ` : ''}
+            
+            <div class="api-actions">
+                <button class="btn btn-primary" onclick="testEndpoint('${endpoint.path}')">
+                    <i class="fas fa-play"></i> Test API
+                </button>
+                <button class="btn btn-secondary" onclick="copyToClipboard('${endpoint.example}')">
+                    <i class="fas fa-copy"></i> Copy URL
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
 
-    const وصل = `https://www.fuku-api.my.id/api/nanobanana?image=${encodeURIComponent(كلم)}&prompt=${encodeURIComponent(فهم)}&apikeyFuku=${encodeURIComponent(علم)}`;
-    setTimeout(() => { window.location.href = وصل; }, 900);
-  });
+// API Testing
+function testEndpoint(endpointPath) {
+    const endpoint = state.apiEndpoints.find(ep => ep.path === endpointPath);
+    if (!endpoint) return;
+    
+    // For now, redirect to the example URL
+    // In a real implementation, you'd want to create a proper API tester interface
+    window.open(endpoint.example, '_blank');
+}
 
-  document.querySelectorAll("#Qp8zR1aX, #L7yK2nWb, #T4hC9eZm").forEach(عنصر => {
-    عنصر.addEventListener("keypress", حدث => {
-      if (حدث.key === "Enter") document.getElementById("U2xP5vQa").click();
+function openApiTester() {
+    // Implementation for API tester modal
+    alert('API Tester feature will be implemented in the next version!');
+}
+
+// Utility Functions
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        showNotification('URL copied to clipboard!', 'success');
+    }).catch(() => {
+        showNotification('Failed to copy URL', 'error');
     });
-  });
-});
+}
 
-document.getElementById('convert-cpanel').addEventListener('click', () => {
-  const username = document.getElementById('user-cpanel').value.trim();
-  const paket = document.getElementById('paket-cpanel').value.trim();
-  const akses = document.getElementById('akses-cpanel').value.trim();
-  const re = document.getElementById('goto-cpanel');
+function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check' : 'exclamation'}"></i>
+        <span>${message}</span>
+    `;
+    
+    // Add styles
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: ${type === 'success' ? '#4ade80' : '#ef4444'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        z-index: 3000;
+        animation: slideInRight 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
 
-  if (!username || !paket || !akses) {
-    re.innerHTML = ' <span style="color: #f59e0b;">Isi kolom diatas.</span>';
-    re.classList.add('show');
-    return;
-  }
+// Intersection Observer for Animations
+function initializeIntersectionObserver() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+    
+    // Observe all API cards and other elements
+    document.querySelectorAll('.api-card, .action-card, .endpoint-card').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'all 0.6s ease';
+        observer.observe(el);
+    });
+}
 
-  re.innerHTML = '<div class="loading"></div> <span style="color: #667eea;">Loading...</span>';
-  re.classList.add('show');
-
-  setTimeout(() => {
-    window.location.href = `https://www.fuku-api.my.id/api/cpanel?username=${encodeURIComponent(username)}&paket=${encodeURIComponent(paket)}&akses=${encodeURIComponent(akses)}`;
-  }, 800);
-});
-
-document.getElementById('akses-cpanel').addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') document.getElementById('convert-cpanel').click();
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  const tombol = document.getElementById("panggang");
-  const wadah = document.getElementById("panci");
-
-  tombol.addEventListener("click", () => {
-    const kaleng = document.getElementById("kaleng").value.trim();
-    if (!kaleng) {
-      wadah.innerHTML = "<span style='color:red'>Masukkan teks terlebih dahulu!</span>";
-      return;
+// Event Listeners
+function initializeEventListeners() {
+    // Theme toggle
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    
+    // Mobile menu
+    document.getElementById('hamburger').addEventListener('click', toggleMobileMenu);
+    
+    // Navigation links
+    document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const sectionId = link.getAttribute('href').substring(1);
+            showSection(sectionId);
+            
+            // Close mobile menu if open
+            const mobileMenu = document.getElementById('mobileMenu');
+            const hamburger = document.getElementById('hamburger');
+            if (mobileMenu.classList.contains('active')) {
+                toggleMobileMenu();
+            }
+        });
+    });
+    
+    // Contact form
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', handleContactSubmit);
     }
+    
+    // Mouse move effects
+    document.addEventListener('mousemove', handleMouseMove);
+}
 
-    wadah.innerHTML = "<div class='loading'></div> <span style='color:#667eea;'>Loading...</span>";
-
-    const imgUrl = `https://www.fuku-api.my.id/api/brat?text=${encodeURIComponent(kaleng)}`;
+function handleContactSubmit(e) {
+    e.preventDefault();
+    
+    const button = e.target.querySelector('button');
+    const originalText = button.innerHTML;
+    
+    // Show loading state
+    button.innerHTML = '<div class="loading"></div> Sending...';
+    button.disabled = true;
+    
+    // Simulate API call
     setTimeout(() => {
-      window.location.href = `https://www.fuku-api.my.id/api/brat?text=${encodeURIComponent(kaleng)}`;
-    }, 800);
-  });
+        button.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+        button.style.background = 'linear-gradient(135deg, #4ade80, #22c55e)';
+        
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.style.background = '';
+            button.disabled = false;
+            e.target.reset();
+            
+            showNotification('Message sent successfully!', 'success');
+        }, 2000);
+    }, 1500);
+}
 
-  document.getElementById("kaleng").addEventListener("keypress", e => {
-    if (e.key === "Enter") tombol.click();
-  });
-});
+function handleMouseMove(e) {
+    const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+    const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+    
+    document.querySelectorAll('.orb').forEach((orb, index) => {
+        const speed = (index + 1) * 0.5;
+        orb.style.transform = `translate(${moveX * speed}px, ${moveY * speed}px)`;
+    });
+}
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("tts-button").addEventListener("click", () => {
-    const text = document.getElementById("tts-text").value.trim();
-    const voice = document.getElementById("tts-voice").value;
-    const resultDiv = document.getElementById("tts-result");
-
-    if (!text) {
-      resultDiv.innerHTML = "<span style='color:red'>Masukkan teks terlebih dahulu!</span>";
-      resultDiv.classList.add('show');
-      return;
+// Add CSS for notifications
+const notificationStyles = `
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
     }
-
-    resultDiv.innerHTML = '<div class="loading"></div> <span style="color: #667eea;">Memproses...</span>';
-    resultDiv.classList.add('show');
-
-    setTimeout(() => {
-      window.location.href = `https://www.fuku-api.my.id/api/qwentts?text=${encodeURIComponent(text)}&voice=${encodeURIComponent(voice)}`;
-    }, 800);
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("аржун-кнопка").addEventListener("click", () => {
-    const тект = document.getElementById("аржун-тект").value.trim();
-    const гoлoc = document.getElementById("аржун-гoлoc").value;
-    const cкopocть = document.getElementById("аржун-cкopocть").value || 1;
-    const тoн = document.getElementById("аржун-тoн").value || 0;
-    const peзyльтат = document.getElementById("аржун-peзyльтат");
-
-    if (!тект) {
-      peзyльтат.innerHTML = "<span style='color:red'>Masukkan teks terlebih dahulu!</span>";
-      peзyльтат.classList.add('show');
-      return;
+    to {
+        transform: translateX(0);
+        opacity: 1;
     }
+}
 
-    peзyльтат.innerHTML = '<div class="loading"></div> <span style="color:#667eea;">Memproses...</span>';
-    peзyльтат.classList.add('show');
-
-    setTimeout(() => {
-      window.location.href = `https://www.fuku-api.my.id/api/tts?text=${encodeURIComponent(тект)}&voice=${encodeURIComponent(гoлoc)}&speed=${encodeURIComponent(cкopocть)}&pitch=${encodeURIComponent(тoн)}`;
-    }, 800);
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("send-chat").addEventListener("click", () => {
-    const pre = document.getElementById("pre").value.trim();
-    const qu = document.getElementById("qu").value.trim();
-    const divRess = document.getElementById("divRess");
-
-    if (!qu) {
-      divRess.innerHTML = "<span style='color:red'>Masukkan query terlebih dahulu!</span>";
-      divRess.classList.add('show');
-      return;
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
     }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+`;
 
-    divRess.innerHTML = '<div class="loading"></div> <span style="color: #667eea;">Proses...</span>';
-    divRess.classList.add('show');
+// Inject notification styles
+const styleSheet = document.createElement('style');
+styleSheet.textContent = notificationStyles;
+document.head.appendChild(styleSheet);
 
-    setTimeout(() => {
-      window.location.href = `https://www.fuku-api.my.id/api/chatbot?prompt=${encodeURIComponent(pre)}&query=${encodeURIComponent(qu)}`;
-    }, 800);
-  });
-
-  document.getElementById('pre').addEventListener('keypress', (e) => { 
-    if (e.key === 'Enter') document.getElementById('send-chat').click(); 
-  });
-
-  document.getElementById('qu').addEventListener('keypress', (e) => { 
-    if (e.key === 'Enter') document.getElementById('send-chat').click(); 
-  });
-});
-
-
-document.getElementById('pre').addEventListener('keypress', (e) => { 
-  if (e.key === 'Enter') document.getElementById('send-chat').click(); 
-});
-
-document.getElementById('qu').addEventListener('keypress', (e) => { 
-  if (e.key === 'Enter') document.getElementById('send-chat').click(); 
-});
-
-document.getElementById('WpZ').addEventListener('click', () => {
-  const prompt = document.getElementById('cxA').value.trim();
-  const ratio = document.getElementById('hRt').value.trim();
-  const result = document.getElementById('qLb');
-
-  if (!prompt || !ratio) {
-    result.innerHTML = '⚠️ <span style="color:#f59e0b;">Harap isi semua field!</span>';
-    result.classList.add('show');
-    return;
-  }
-
-  result.innerHTML = '<div class="loading"></div> <span style="color:#667eea;">Memproses...</span>';
-  result.classList.add('show');
-
-  setTimeout(() => {
-    window.location.href = `https://www.fuku-api.my.id/api/imagen?prompt=${encodeURIComponent(prompt)}&ratio=${encodeURIComponent(ratio)}`;
-  }, 800);
-});
-
-document.getElementById('hRt').addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') document.getElementById('WpZ').click();
-});
-
-document.getElementById('convert-beton').addEventListener('click', () => {
-  const urlyt = document.getElementById('urlnya').value.trim();
-  const re = document.getElementById('goto');
-  if (!urlyt) {
-    re.innerHTML = '⚠️ <span style="color: #f59e0b;">Masukkan input</span>';
-    re.classList.add('show');
-    return;
-  }
-  re.innerHTML = '<div class="loading"></div> <span style="color: #667eea;">Proses...</span>';
-  re.classList.add('show');
-  setTimeout(() => { window.location.href = `https://www.fuku-api.my.id/api/ytmp3?url=${encodeURIComponent(urlyt)}&quality=128`; }, 800);
-});
-document.getElementById('urlnya').addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('convert-beton').click(); });
-
-document.getElementById('convert-button').addEventListener('click', () => {
-  const inputText = document.getElementById('input-text').value.trim();
-  const resultDiv = document.getElementById('result');
-  if (!inputText) {
-    resultDiv.innerHTML = '⚠️ <span style="color: #f59e0b;">Please enter some text first!</span>';
-    resultDiv.classList.add('show');
-    return;
-  }
-  resultDiv.innerHTML = '<div class="loading"></div> <span style="color: #667eea;">Redirecting to API...</span>';
-  resultDiv.classList.add('show');
-  setTimeout(() => { window.location.href = `https://www.fuku-api.my.id/api/tobase64?text=${encodeURIComponent(inputText)}`; }, 800);
-});
-document.getElementById('input-text').addEventListener('keypress', (e) => { if (e.key === 'Enter') document.getElementById('convert-button').click(); });
-
-document.getElementById('contact-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const button = e.target.querySelector('button');
-  const originalText = button.textContent;
-  button.innerHTML = '<div class="loading"></div> Sending...';
-  button.disabled = true;
-  setTimeout(() => {
-    button.textContent = '✓ Message Sent!';
-    button.style.background = 'linear-gradient(135deg, #4ade80, #22c55e)';
-    setTimeout(() => {
-      button.textContent = originalText;
-      button.style.background = '';
-      button.disabled = false;
-      e.target.reset();
-    }, 2000);
-  }, 1500);
-});
-
-document.addEventListener('mousemove', (e) => {
-  const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
-  const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
-  document.querySelectorAll('.orb').forEach((orb, index) => {
-    const speed = (index + 1) * 0.5;
-    orb.style.transform = `translate(${moveX * speed}px, ${moveY * speed}px)`;
-  });
-});
-
-const sections = document.querySelectorAll('section[id]');
-const navLinks = document.querySelectorAll('.nav a');
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(section => {
-    const sectionTop = section.offsetTop - 100;
-    const sectionHeight = section.offsetHeight;
-    if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) current = section.getAttribute('id');
-  });
-  navLinks.forEach(link => {
-    link.classList.remove('active');
-    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
-    link.style.color = 'rgba(255, 255, 255, 0.8)';
-    if (link.getAttribute('href').slice(1) === current) link.style.color = '#667eea';
-  });
-});
-
-setInterval(() => {
-  const responseTime = document.getElementById('response-time');
-  const randomMs = Math.floor(Math.random() * 20) + 40;
-  responseTime.textContent = `< ${randomMs}ms`;
-}, 5000);
-
-setInterval(() => {
-  const requests = document.getElementById('requests');
-  const currentVal = parseInt(requests.textContent);
-  requests.textContent = (currentVal + Math.floor(Math.random() * 100)) + 'M+';
-}, 10000);
-
-document.querySelectorAll('.code-block').forEach(block => {
-  block.addEventListener('mouseenter', () => { block.style.boxShadow = '0 0 30px rgba(102, 126, 234, 0.4)'; });
-  block.addEventListener('mouseleave', () => { block.style.boxShadow = ''; });
-});
+// Export functions for global access
+window.scrollToSection = scrollToSection;
+window.testEndpoint = testEndpoint;
+window.copyToClipboard = copyToClipboard;
+window.openApiTester = openApiTester;
+window.toggleTheme = toggleTheme;

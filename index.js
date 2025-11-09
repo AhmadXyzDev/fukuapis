@@ -143,7 +143,7 @@ app.get('/api/cpanel', async (req, res) => {
   const akses = req.query.akses;
   const keyType = req.query.key || "apikey"; // default pakai apikey
 
-const tokenPln = ['babibune', 'arahkuc', 'bulukutup'];
+const tokenPln = ['babibune', 'arahkuc', 'bulucombik'];
 if (!akses || !tokenPln.includes(akses)) {
   return res.status(401).json({ status: false, error: 'Yah:)... key salah atau voucher telah mencapai batas! silahkan buy akses ke +6281527100923 - ahmadXyz' });
 }

@@ -127,9 +127,9 @@ app.get('/api/sunoaimaker', async (req, res) => {
 global.egg = "15";
 global.nestid = "5";
 global.loc = "1";
-global.domain = "https://fukushima.privateeserverr.my.id";
-global.apikey = "ptla_rr5ll4S3bSMgaee2wlD6OT3TK8yVUm0ddk8W11idwnf";
-global.capikey = "ptlc_tKqcJQhrT9UMtJZvacR3QTqZIN72NrYYoXjWKCuchXs";
+global.domain = "https://fukushima.pterodaytl.my.id";
+global.apikey = "ptla_JxXS6RRooad5z733FCbNLxlk8mzadQ3YOaz7pWo3B1h";
+global.capikey = "ptlc_gL0oACAWIryqASZ7C2UiIzeUX3qit201D96d5YTVMjX";
 
 const aksesCount = {
   proc: 0, // max 5 kali
@@ -143,7 +143,7 @@ app.get('/api/cpanel', async (req, res) => {
   const akses = req.query.akses;
   const keyType = req.query.key || "apikey"; // default pakai apikey
 
-const tokenPln = ['babibune', 'arahkuc', 'bulucombik'];
+const tokenPln = ['fukux', 'arahkuc', 'bulucombi'];
 if (!akses || !tokenPln.includes(akses)) {
   return res.status(401).json({ status: false, error: 'Yah:)... key salah atau voucher telah mencapai batas! silahkan buy akses ke +6281527100923 - ahmadXyz' });
 }

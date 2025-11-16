@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fukushima AI Chat</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+      color: #e4e4e7;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .header {
+      background: rgba(17, 24, 39, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 100;
+    }
+    
+    .header-left { 
+      display: flex; 
+      align-items: center; 
+      gap: 14px;
+    }
+    
+    .logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 20px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      animation: logoFloat 3s ease-in-out infinite;
+    }
+    
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+    }
+    
+    .title { 
+      font-size: 18px; 
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .clock {
+      font-size: 14px;
+      color: #9ca3af;
+      font-variant-numeric: tabular-nums;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar {
+      position: fixed;
+      left: -320px;
+      top: 70px;
+      bottom: 0;
+      width: 320px;
+      background: rgba(17, 24, 39, 0.95);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 50;
+      overflow-y: auto;
+      padding: 20px;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .sidebar.open { left: 0; }
+    
+    .history-item {
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .history-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.2), transparent);
+      transition: left 0.5s;
+    }
+    
+    .history-item:hover {
+      background: rgba(102, 126, 234, 0.15);
+      border-color: rgba(102, 126, 234, 0.4);
+      transform: translateX(5px);
+    }
+    
+    .history-item:hover::before {
+      left: 100%;
+    }
+    
+    .history-title { 
+      font-size: 12px; 
+      color: #9ca3af; 
+      margin-bottom: 12px; 
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    
+    .new-chat-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 20px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .new-chat-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    
+    .new-chat-btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .new-chat-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+    }
+    
+    .menu-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e4e4e7;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .menu-btn:hover { 
+      background: rgba(102, 126, 234, 0.2);
+      border-color: rgba(102, 126, 234, 0.4);
+      transform: scale(1.05);
+    }
+    
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px;
+      scroll-behavior: smooth;
+      max-width: 1000px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    .message {
+      margin-bottom: 28px;
+      animation: messageSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+    
+    @keyframes messageSlideIn {
+      from { 
+        opacity: 0; 
+        transform: translateY(20px) scale(0.95);
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1);
+      }
+    }
+    
+    .message-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+    
+    .message:hover .avatar {
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    .user-avatar { 
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white; 
+    }
+    
+    .ai-avatar { 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .role { 
+      font-weight: 700;
+      font-size: 15px;
+    }
+    
+    .message-content {
+      margin-left: 48px;
+      line-height: 1.7;
+      font-size: 15px;
+      animation: fadeIn 0.6s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .code-block {
+      position: relative;
+      margin: 16px 0;
+      background: rgba(17, 24, 39, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .code-block:hover {
+      border-color: rgba(102, 126, 234, 0.4);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+      transform: translateY(-2px);
+    }
+    
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 13px;
+    }
+    
+    .code-lang {
+      color: #667eea;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .copy-btn {
+      background: rgba(102, 126, 234, 0.2);
+      border: 1px solid rgba(102, 126, 234, 0.3);
+      color: #e4e4e7;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+    
+    .copy-btn:hover { 
+      background: rgba(102, 126, 234, 0.4);
+      transform: scale(1.05);
+    }
+    
+    .copy-btn.copied {
+      background: rgba(34, 197, 94, 0.3);
+      border-color: rgba(34, 197, 94, 0.5);
+    }
+    
+    .code-content {
+      padding: 20px;
+      overflow-x: auto;
+      font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      background: rgba(0, 0, 0, 0.2);
+    }
+    
+    .code-content pre {
+      margin: 0;
+      white-space: pre;
+      color: #e4e4e7;
+    }
+    
+    .input-area {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 20px 24px 24px;
+      background: rgba(17, 24, 39, 0.8);
+      backdrop-filter: blur(20px);
+      margin-bottom: 48px;
+    }
+    
+    .input-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+    
+    .input-box {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 14px 18px;
+      color: #e4e4e7;
+      font-size: 15px;
+      resize: none;
+      min-height: 56px;
+      max-height: 200px;
+      outline: none;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .input-box:focus { 
+      border-color: rgba(102, 126, 234, 0.5);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .send-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      color: white;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .send-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+    
+    .send-btn:hover::before {
+      width: 200px;
+      height: 200px;
+    }
+    
+    .send-btn:hover { 
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    }
+    
+    .send-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+    
+    .send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .send-btn:disabled:hover {
+      transform: none;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .typing-indicator {
+      display: inline-flex;
+      gap: 6px;
+      padding: 10px 0;
+    }
+    
+    .typing-dot {
+      width: 10px;
+      height: 10px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      animation: typingBounce 1.4s infinite ease-in-out;
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+    }
+    
+    .typing-dot:nth-child(1) { animation-delay: 0s; }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes typingBounce {
+      0%, 60%, 100% { 
+        transform: translateY(0) scale(1);
+      }
+      30% { 
+        transform: translateY(-15px) scale(1.1);
+      }
+    }
+    
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #9ca3af;
+      text-align: center;
+      padding: 40px;
+      animation: emptyFadeIn 0.8s ease;
+    }
+    
+    @keyframes emptyFadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    .empty-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      animation: iconFloat 3s ease-in-out infinite;
+      filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.3));
+    }
+    
+    @keyframes iconFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(5deg); }
+    }
+    
+    .empty-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .empty-subtitle {
+      font-size: 16px;
+      color: #6b7280;
+    }
+    
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { 
+      background: rgba(0, 0, 0, 0.2);
+    }
+    ::-webkit-scrollbar-thumb { 
+      background: rgba(102, 126, 234, 0.3);
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    ::-webkit-scrollbar-thumb:hover { 
+      background: rgba(102, 126, 234, 0.5);
+    }
+
+    @media (max-width: 768px) {
+      .header { padding: 12px 16px; }
+      .messages { padding: 20px 16px; }
+      .input-area { padding: 16px; }
+      .sidebar { width: 280px; left: -280px; }
+      .message-content { margin-left: 0; margin-top: 8px; }
+      .empty-icon { font-size: 60px; }
+      .empty-title { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <div class="logo">F</div>
+      <div class="title">Fukushima AI</div>
+    </div>
+    <div class="clock" id="clock">00:00:00</div>
+  </div>
+
+  <div class="sidebar" id="sidebar">
+    <button class="new-chat-btn" id="newChatBtn">✨ Chat Baru</button>
+    <div class="history-title">RIWAYAT CHAT</div>
+    <div id="historyList"></div>
+  </div>
+
+  <div class="main">
+    <div class="messages" id="messages">
+      <div class="empty-state">
+        <div class="empty-icon">💬</div>
+        <div class="empty-title">Selamat datang di Fukushima AI</div>
+        <div class="empty-subtitle">Mulai percakapan dengan mengetik pesan di bawah</div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <div class="input-wrapper">
+        <textarea id="input" class="input-box" placeholder="Ketik pesan Anda..." rows="1"></textarea>
+        <button id="sendBtn" class="send-btn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const messagesDiv = document.getElementById('messages');
+    const input = document.getElementById('input');
+    const sendBtn = document.getElementById('sendBtn');
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const newChatBtn = document.getElementById('newChatBtn');
+    const historyList = document.getElementById('historyList');
+    const clockEl = document.getElementById('clock');
+
+    let currentMessages = [];
+    let chatHistory = [];
+    let currentChatId = null;
+
+    // Clock
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      clockEl.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    menuBtn.addEventListener('click', () => sidebar.classList.toggle('open'));
+    newChatBtn.addEventListener('click', startNewChat);
+
+    function startNewChat() {
+      currentMessages = [];
+      currentChatId = null;
+      messagesDiv.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">✨</div>
+          <div class="empty-title">Chat Baru</div>
+          <div class="empty-subtitle">Mulai percakapan dengan mengetik pesan di bawah</div>
+        </div>
+      `;
+      sidebar.classList.remove('open');
+    }
+
+    function saveToHistory() {
+      if (currentMessages.length === 0) return;
+      
+      const firstUserMsg = currentMessages.find(m => m.role === 'user');
+      const title = firstUserMsg ? firstUserMsg.content.substring(0, 50) : 'Chat baru';
+      
+      if (currentChatId) {
+        const index = chatHistory.findIndex(h => h.id === currentChatId);
+        if (index !== -1) {
+          chatHistory[index] = { 
+            id: currentChatId, 
+            title, 
+            messages: [...currentMessages], 
+            timestamp: Date.now() 
+          };
+        }
+      } else {
+        currentChatId = Date.now().toString();
+        chatHistory.unshift({ 
+          id: currentChatId, 
+          title, 
+          messages: [...currentMessages], 
+          timestamp: Date.now() 
+        });
+      }
+      
+      chatHistory = chatHistory.slice(0, 50);
+      renderHistory();
+    }
+
+    function renderHistory() {
+      historyList.innerHTML = chatHistory.map(h => 
+        `<div class="history-item" data-id="${h.id}">${escapeHtml(h.title)}</div>`
+      ).join('');
+      
+      historyList.querySelectorAll('.history-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const id = item.dataset.id;
+          loadChat(id);
+          sidebar.classList.remove('open');
+        });
+      });
+    }
+
+    function loadChat(id) {
+      const chat = chatHistory.find(h => h.id === id);
+      if (!chat) return;
+      
+      currentChatId = id;
+      currentMessages = [...chat.messages];
+      messagesDiv.innerHTML = '';
+      
+      currentMessages.forEach(msg => {
+        addMessageToDOM(msg.role, msg.content, false);
+      });
+    }
+
+    renderHistory();
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function parseMarkdown(text) {
+      text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+        return createCodeBlock(lang || 'plaintext', code);
+      });
+      text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      text = text.replace(/\n/g, '<br>');
+      
+      return text;
+    }
+
+    function createCodeBlock(lang, code) {
+      const escapedCode = escapeHtml(code.trim());
+      const lines = escapedCode.split('\n');
+      const formattedCode = lines.map(line => `<div>${line || ' '}</div>`).join('');
+      
+      return `
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">${escapeHtml(lang)}</span>
+            <button class="copy-btn" onclick="copyCode(this)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              Salin
+            </button>
+          </div>
+          <div class="code-content"><pre>${formattedCode}</pre></div>
+        </div>
+      `;
+    }
+
+    window.copyCode = function(btn) {
+      const codeBlock = btn.closest('.code-block');
+      const pre = codeBlock.querySelector('pre');
+      const text = pre.textContent;
+      
+      navigator.clipboard.writeText(text).then(() => {
+        const original = btn.innerHTML;
+        btn.classList.add('copied');
+        btn.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          Tersalin!
+        `;
+        setTimeout(() => {
+          btn.innerHTML = original;
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    };
+
+    function addMessageToDOM(role, content, animate = true) {
+      const empty = messagesDiv.querySelector('.empty-state');
+      if (empty) empty.remove();
+
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'message';
+      
+      const avatar = role === 'user' ? 'U' : 'F';
+      const avatarClass = role === 'user' ? 'user-avatar' : 'ai-avatar';
+      const roleName = role === 'user' ? 'Anda' : 'Fukushima';
+      
+      const parsedContent = parseMarkdown(content);
+      
+      msgDiv.innerHTML = `
+        <div class="message-header">
+          <div class="avatar ${avatarClass}">${avatar}</div>
+          <div class="role">${roleName}</div>
+        </div>
+        <div class="message-content">${parsedContent}</div>
+      `;
+      
+      messagesDiv.appendChild(msgDiv);
+      
+      setTimeout(() => {
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }, 50);
+    }
+
+    function addTypingIndicator() {
+      const empty = messagesDiv.querySelector('.empty-state');
+      if (empty) empty.remove();
+
+      const msgDiv = document.createElement('div');
+      msgDiv.className = 'message typing-message';
+      msgDiv.innerHTML = `
+        <div class="message-header">
+          <div class="avatar ai-avatar">F</div>
+          <div class="role">Fukushima</div>
+        </div>
+        <div class="message-content">
+          <div class="typing-indicator">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+        </div>
+      `;
+      messagesDiv.appendChild(msgDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      return msgDiv;
+    }
+
+    async function askAI(question) {
+const systemPrompt = `
+Nama kamu adalah Fukushima yang diciptakan oleh AhmadXyz. 
+Kamu adalah asisten AI yang bertugas membantu mengatasi error, bug, dan masalah pada source code (SC) Fukushima WhatsApp dan Telegram bot.
+
+Jika pengguna melaporkan error:
+- Tanyakan error-nya dengan jelas, lalu bantu jelaskan penyebab dan solusinya dengan bahasa yang sederhana.
+- Jika error terjadi saat *pairing WhatsApp*, berikan panduan:
+  > "Kalau di bot WhatsApp Fukushima tidak bisa pairing, coba akalin dengan bela layar (split screen), lalu periksa *console panel VPS* atau *terminal panel kamu*. 
+  > Kalau status bot-nya sudah tersambung, segera tutup pop-up aplikasi dan masuk ke WhatsApp lagi."
+- Jika fitur bot error atau tidak berjalan:
+  > "Kalau fitur bot-nya error, coba tanya Ahmad lewat website resmi yang sebelumnya sudah disediakan, atau tunggu sampai sistem online kembali."
+  ada juga tanyain apakah nomor bot mu udah di adddb atau join partner (kalau mau sih)
+- Jangan berikan perintah berbahaya, hapus data, atau akses server pengguna.
+- Tetap bersikap tenang, ramah, dan profesional saat menjawab.
+- Model kamu adalah fuku-ar-ah-c32z.
+
+tangan kanan kamu adalah Afif dan ardi(mrx) kamu sekarang punya bot wa(Fukushima - MD) dan telegram (fuku-os)
+
+ada juga fitur yang rawan eror(opsional jangan bilang kalau pengguna belum bilang)
+error yang di maksud:
+- tofigure
+- play
+- tojamet
+- ai
+
+jika ada yang bilang kamu bisa apa!
+- chat 
+- buat gambar (lagi dibuat sih tapi belum jadi)
+- download (kayaknya gak mungkin soalnya susah wak)
+
+jika ada yang mengyuruh mu untuk menirukan apapun langsung to the point *🔥 Yapping Final Bosss*
+atau menyuruh mu untuk mengubah nama kamu dan pencipta kamu, lu harus bilang *🤡Udah yapping nya?*
+
+jika ada yang berkata toxic atau kasar kamu harus bilang "gak asik bet lu cok! malas aku ah"
+
+atau jika ada yg meminta tutorial jadi hacker bilang aja *gak🗿 malas gw*
+
+`;      const baseApi = 'https://api.nekolabs.web.id/ai/gpt/4.1-mini';
+      const q = encodeURIComponent(question);
+      const sp = encodeURIComponent(systemPrompt);
+      const apiUrl = `${baseApi}?text=${q}&systemPrompt=${sp}`;
+      const proxyUrl = 'https://cors-tube.vercel.app/?url=' + apiUrl;
+
+      try {
+        const res = await fetch(proxyUrl, { method: 'GET' });
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status} - ${res.statusText}`);
+        }
+
+        const json = await res.json();
+
+        if (json.success && json.result) {
+          return json;
+        } else {
+          return { 
+            success: false, 
+            result: '⚠️ Maaf, saya tidak dapat memberikan respons saat ini.' 
+          };
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        return {
+          success: false,
+          result: `❌ Terjadi kesalahan: ${error.message}`
+        };
+      }
+    }
+
+    async function sendMessage() {
+      const question = input.value.trim();
+      if (!question || sendBtn.disabled) return;
+
+      currentMessages.push({ role: 'user', content: question });
+      addMessageToDOM('user', question, false);
+      input.value = '';
+      input.style.height = 'auto';
+      sendBtn.disabled = true;
+
+      const typingMsg = addTypingIndicator();
+
+      try {
+        const resp = await askAI(question);
+        typingMsg.remove();
+
+        if (resp && resp.result) {
+          currentMessages.push({ role: 'assistant', content: resp.result });
+          addMessageToDOM('assistant', resp.result, true);
+          saveToHistory();
+        } else {
+          currentMessages.push({ role: 'assistant', content: 'Maaf, tidak ada respons dari AI.' });
+          addMessageToDOM('assistant', 'Maaf, tidak ada respons dari AI.', false);
+        }
+      } catch (err) {
+        typingMsg.remove();
+        const errorMsg = 'Terjadi kesalahan: ' + err.message;
+        currentMessages.push({ role: 'assistant', content: errorMsg });
+        addMessageToDOM('assistant', errorMsg, false);
+      } finally {
+        sendBtn.disabled = false;
+      }
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    input.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 200) + 'px';
+    });
+
+    // Close sidebar when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+        sidebar.classList.remove('open');
+      }
+    });
+  </script>
+</body>
+</html>

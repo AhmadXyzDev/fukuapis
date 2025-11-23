@@ -42,6 +42,90 @@ app.get('/api/tobase64', (req, res) => {
   });
 });
 
+
+global.subdomain = { 
+  "fuku-cloud.my.id": { 
+    zone: "4f500478648773efa71c96fce87cd92d",   // Zone ID Cloudflare
+    apitoken: "WK9-d5psbMaGqkisl8P58L51Z6dhRyIhnBgbD2Ed", // API Token Cloudflare
+  },
+  "ahmadxyzcoders.my.id": { 
+    zone: "fe324140eca6490d66d3da786aa0d922",
+    apitoken: "WK9-d5psbMaGqkisl8P58L51Z6dhRyIhnBgbD2Ed",
+  },
+  "fuku-api.my.id": {
+    zone: "6dba8f619c6358cf6dcf01a60f017a56",
+    apitoken: "WK9-d5psbMaGqkisl8P58L51Z6dhRyIhnBgbD2Ed"
+  },
+  "fukugpt.my.id": {
+    zone: "d9ecadda6827409d475a19eec6b87bef",
+    apitoken: "WK9-d5psbMaGqkisl8P58L51Z6dhRyIhnBgbD2Ed"
+  }
+};
+
+app.get("/api/subdomain", async (req, res) => {
+  try {
+    const { host, ip, domainIndex } = req.query;
+
+    const dom = Object.keys(global.subdomain || {});
+    if (!host || !ip || domainIndex === undefined) {
+      const list = dom.map((d, i) => `${i + 1}. ${d}`).join("\n");
+      return res.status(400).json({
+        status: false,
+        message: `Format salah. Gunakan query: host, ip, domainIndex\nDaftar domain:\n${list}`
+      });
+    }
+
+    if (!/^[a-z0-9-]+$/i.test(host)) {
+      return res.status(400).json({ status: false, message: "Hostname tidak valid" });
+    }
+
+    if (!/^(\d{1,3}\.){3}\d{1,3}$/.test(ip)) {
+      return res.status(400).json({ status: false, message: "IP VPS tidak valid" });
+    }
+
+    const idx = parseInt(domainIndex);
+    if (idx < 0 || idx >= dom.length) {
+      const list = dom.map((d, i) => `${i + 1}. ${d}`).join("\n");
+      return res.status(400).json({ status: false, message: `Pilihan domain tidak valid\n${list}` });
+    }
+
+    const tld = dom[idx];
+    const sub = global.subdomain[tld];
+
+    const response = await axios.post(
+      `https://api.cloudflare.com/client/v4/zones/${sub.zone}/dns_records`,
+      {
+        type: "A",
+        name: `${host}.${tld}`,
+        content: ip,
+        ttl: 1,
+        proxied: false,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${sub.apitoken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const data = response.data;
+    if (data.success) {
+      return res.json({
+        status: true,
+        message: "Subdomain berhasil dibuat",
+        subdomain: data.result?.name || `${host}.${tld}`,
+        ip: data.result?.content || ip
+      });
+    } else {
+      return res.status(500).json({ status: false, message: "Gagal membuat subdomain" });
+    }
+  } catch (err) {
+    const errorMsg = err.response?.data?.errors?.[0]?.message || err.message;
+    return res.status(500).json({ status: false, message: errorMsg });
+  }
+});
+
 app.get('/api/sunoraimaker', async (req, res) => {
   const { description, title = "Fuku", mood = "Sad", style = "Akustik" } = req.query;
 

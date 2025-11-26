@@ -439,6 +439,103 @@ app.get("/api/gateaway", async (req, res) => {
   }
 });
 
+app.get("/api/gatafif", async (req, res) => {
+  const trxId = req.query.transactionId;
+
+  if (!trxId) {
+    return res.status(400).json({
+      status: false,
+      message: 'Missing "transactionId" query parameter'
+    });
+  }
+
+  // Hardcode license
+  const licensex = "cashify_517c36e55e1b3f5a3cfa0cdaf0c48a97bac535f09016736609758e4a089d841d";
+
+  try {
+    const { data } = await axios.post(
+      "https://cashify.my.id/api/generate/check-status",
+      { transactionId: trxId },
+      {
+        headers: {
+          "x-license-key": licensex,
+          "content-type": "application/json"
+        }
+      }
+    );
+
+    // Balikan sesuai Cashify
+    res.json({
+      status: true,
+      transactionId: data.data.transactionId,
+      amount: data.data.amount,
+      paymentStatus: data.data.status, // pending / paid
+      expiredAt: data.data.expiredAt
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      status: false,
+      message: "Failed to check payment status",
+      error: err.response?.data || err.message
+    });
+  }
+});
+
+
+app.get("/api/afifgateaway", async (req, res) => {
+  const harga = req.query.harga;
+
+  if (!harga) {
+    return res.status(400).json({
+      status: false,
+      message: 'Missing "harga" query parameter'
+    });
+  }
+
+  // Hardcode license dan id QRIS
+  const license = "cashify_517c36e55e1b3f5a3cfa0cdaf0c48a97bac535f09016736609758e4a089d841d";
+  const qrisId = "c2def5f7-a1b8-42ec-b443-d5ce20e293b5";
+
+  try {
+    const { data } = await axios.post(
+      "https://cashify.my.id/api/generate/qris",
+      {
+        id: qrisId,
+        amount: Number(harga),
+        useUniqueCode: true,
+        packageIds: ["id.dana"],
+        expiredInMinutes: 15
+      },
+      {
+        headers: {
+          "x-license-key": license,
+          "content-type": "application/json"
+        }
+      }
+    );
+
+    res.json({
+      status: true,
+      gateway: "Cashify",
+      qr_string: data.data.qr_string,
+      transactionId: data.data.transactionId,
+      originalAmount: data.data.originalAmount,
+      totalAmount: data.data.totalAmount,
+      uniqueNominal: data.data.uniqueNominal,
+      packageIds: data.data.packageIds
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      status: false,
+      message: "Failed to create QRIS payment",
+      error: err.response?.data || err.message
+    });
+  }
+});
+
+
 app.get('/api/listserverpnl', async (req, res) => {
   const keyType = req.query.key || "apikey";
   const apiKey = keyType === "capikey" ? global.capikey : global.apikey;
